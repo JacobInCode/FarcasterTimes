@@ -76,18 +76,18 @@ export default async function Index() {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center mt-56 mb-32 relative">
-      <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-36'>
+      <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-20 lg:px-36'>
 
         <div className='pt-5 text-xs'>
           A Balaji Srinivasan Bounty Inspired Creation
         </div>
-        <div className='p-6 w-full flex justify-center border-b relative'>
-          <div className="absolute left-0 flex flex-col space-y-0.5">
+        <div className='px-32 lg:p-6 w-full flex justify-center border-b relative'>
+          <div className="hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0">
             <div className='text-xs font-bold'>{currentDate}</div>
             <div className='text-xs'>Today's Date</div>
           </div>
           <TitleLogo className="" />
-          <div className="absolute right-0 flex flex-col space-y-0.5">
+          <div className="hidden sm:inline absolute right-0 flex flex-col space-y-0.5 pr-3 md:px-0">
             <div className='text-sm font-bold'>ETH ${priceOfEthereum}</div>
           </div>
           
