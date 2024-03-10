@@ -5,6 +5,8 @@ import Header from "@/components/Header";
 import { createBrowserClient } from '@supabase/ssr'
 import ArticlesFeed from "@/components/ArticlesFeed";
 import ArticlePage from "@/components/ArticlePage";
+import TitleLogo from "@/components/TitleLogo";
+import Link from "next/link";
 
 function shouldGenerate(lastGeneration: any): boolean {
   let generate = false;
@@ -28,10 +30,10 @@ export default async function Index({ params }: { params: { id: string } }) {
   let article = null;
 
   const { data: articleData, error: articlesError } = await supabaseAdmin
-        .from('articles')
-        .select('*')
-        .eq('id', params.id || '')
-        .single()
+    .from('articles')
+    .select('*')
+    .eq('id', params.id || '')
+    .single()
 
   if (articlesError) {
     console.error(articlesError);
@@ -41,6 +43,13 @@ export default async function Index({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center mt-20 mb-32">
+      <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-20 lg:px-36'>
+        <Link href="/" className='py-1 w-full flex justify-center relative w-96'>
+          <TitleLogo className="h-10" />
+        </Link>
+        <div className="border-b w-full" />
+
+      </div>
       <ArticlePage article={article} />
     </div>
   );
