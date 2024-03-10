@@ -187,7 +187,7 @@ async function callChatAPI(casts: string) {
 }
 
 const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> = ({ articles: loadedArticles, channelId }) => {
-    const client = new NeynarAPIClient('F27ECCFC-2E15-40B4-AB89-A6A595804D7F');
+    const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY || '');
     const [articles, setArticles] = useState<Article[] | null>(loadedArticles);
     const intialLoad = useRef(true);
 
