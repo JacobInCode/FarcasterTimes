@@ -21,6 +21,8 @@ function shouldGenerate(lastGeneration: any): boolean {
   return generate;
 }
 
+export const revalidate = 0 // revalidate at most every hour
+
 
 export default async function Index({ params }: { params: { id: string } }) {
   const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
