@@ -84,7 +84,7 @@ export default async function Index({ params }: { params: { id: string } }) {
         <div className='pt-5 text-xs'>
           A Balaji Srinivasan Bounty Inspired Creation
         </div>
-        <div className='px-32 py-3 lg:p-6 w-full flex justify-center border-b relative'>
+        <div className='px-8 sm:px-32 py-3 lg:p-6 w-full flex justify-center border-b relative'>
           <div className="hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0">
             <div className='text-xs font-bold'>{currentDate}</div>
             <div className='text-xs'>Today's Date</div>
