@@ -186,10 +186,9 @@ async function callChatAPI(casts: string) {
     }
 }
 
-const ArticlesFeed: React.FC<{ articles: Article[] | null }> = ({ articles: loadedArticles }) => {
+const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> = ({ articles: loadedArticles, channelId }) => {
     const client = new NeynarAPIClient('F27ECCFC-2E15-40B4-AB89-A6A595804D7F');
     const [articles, setArticles] = useState<Article[] | null>(loadedArticles);
-    const channelId = "ethereum";
     const intialLoad = useRef(true);
 
     useEffect(() => {
@@ -203,14 +202,26 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null }> = ({ articles: load
     const fetchData = async () => {
         try {
 
+            console.log("HERE", channelId);
             // 1. Get all casts for channel for last 24 hours
-            const feedRes = await client.fetchFeed('filter', {
-                filterType: FilterType.ChannelId,
-                channelId: "ethereum",
-                withRecasts: true,
-                withReplies: true,
-                limit: 100
-            });
+            let feedRes;
+            if (channelId === 'trending') {
+                feedRes = await client.fetchFeed('filter', {
+                    filterType: FilterType.GlobalTrending,
+                    // channelId,
+                    withRecasts: true,
+                    withReplies: true,
+                    limit: 100
+                });
+            } else {
+                feedRes = await client.fetchFeed('filter', {
+                    filterType: FilterType.ChannelId,
+                    channelId,
+                    withRecasts: true,
+                    withReplies: true,
+                    limit: 100
+                });
+            }
 
             console.log("HERE", feedRes);
 

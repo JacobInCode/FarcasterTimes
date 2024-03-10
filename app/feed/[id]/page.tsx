@@ -22,10 +22,12 @@ function shouldGenerate(lastGeneration: any): boolean {
 }
 
 
-export default async function Index() {
+export default async function Index({ params }: { params: { id: string } }) {
   const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
-  let channelId = "trending";
+  let channelId = params.id || 'trending';
   let articles = null;
+
+  console.log("channelId", channelId);
 
 
   const response = await fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=ETH', {
@@ -95,13 +97,13 @@ export default async function Index() {
         </div>
         <header className="flex space-x-6 justify-center items-center w-full h-10 bg-primary border-b mx-24 border-black">
           <Link href="/feed/trending">
-          <h1 className={cn("text-[13px]", {"font-semibold" : channelId === "trending"})}>{"Trending"}</h1>
+            <h1 className={cn("text-[13px]", { "font-semibold": channelId === "trending" })}>{"Trending"}</h1>
           </Link>
           <Link href="/feed/ethereum">
-            <h1 className={cn("text-[13px]", {"font-semibold" : channelId === "ethereum"})}>{"Ethereum"}</h1>
+            <h1 className={cn("text-[13px]", { "font-semibold": channelId === "ethereum" })}>{"Ethereum"}</h1>
           </Link>
           <Link href="/feed/farcaster">
-            <h1 className={cn("text-[13px]", {"font-semibold" : channelId === "farcaster"})}>{"Farcaster"}</h1>
+            <h1 className={cn("text-[13px]", { "font-semibold": channelId === "farcaster" })}>{"Farcaster"}</h1>
           </Link>
         </header>
         <div className="w-full border-b mt-1 border-black" />
