@@ -3,7 +3,7 @@ import ArticlesFeed from "@/components/ArticlesFeed";
 import TitleLogo from '@/components/TitleLogo';
 import { format } from 'date-fns';
 import Link from 'next/link';
-import { cn } from '@/utils';
+import { cn } from '@/lib/utils';
 import { inter } from "./fonts";
 import { ChevronDownIcon } from 'lucide-react'
 
@@ -95,9 +95,9 @@ export default async function Index() {
           </div>
         </div>
         <header className="flex space-x-6 justify-center items-center w-full h-10 bg-primary border-b mx-24 border-black">
-        <div className='flex space-x-1 items-center opacity-50'>
-        <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "citizen" })}>{"Citizen"}</h1><ChevronDownIcon className="h-2 w-2" />
-        </div>
+        <Link href="/feed/citizen" className='flex space-x-1 items-center'>
+          <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "citizen" })}>{"Citizen"}</h1><ChevronDownIcon className="h-2 w-2" />
+        </Link>
           <Link href="/feed/trending" className='flex space-x-1 items-center'>
             <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "trending" })}>{"Trending"}</h1><ChevronDownIcon className="h-2 w-2" />
           </Link>

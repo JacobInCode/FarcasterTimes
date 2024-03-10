@@ -4,7 +4,6 @@ import { createClient } from '@/utils/supabase/server'
 import { cookies } from 'next/headers'
 import { createBrowserClient } from '@supabase/ssr';
 
-
 // Define a schema for the request content using Zod
 const articleSchema = z.object({
     body: z.string(),

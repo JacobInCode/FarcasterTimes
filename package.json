@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@neynar/nodejs-sdk": "^1.11.2",
+    "@radix-ui/react-slot": "^1.0.2",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "@tailwindcss/typography": "^0.5.10",
@@ -14,6 +15,7 @@
     "ai": "^3.0.8",
     "autoprefixer": "10.4.17",
     "base64-arraybuffer": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "geist": "^1.2.1",
