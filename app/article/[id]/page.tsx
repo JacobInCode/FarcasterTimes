@@ -42,13 +42,12 @@ export default async function Index({ params }: { params: { id: string } }) {
   article = articleData;
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center mt-20 mb-32">
-      <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-20 lg:px-36'>
-        <Link href="/" className='py-1 flex justify-center relative w-96'>
-          <TitleLogo className="h-10" />
+    <div className="flex-1 w-full flex flex-col gap-7 items-center mb-32 max-w-6xl">
+      <div className='w-full flex flex-col items-center justify-center bg-background'>
+        <Link href="/" className='py-1 flex justify-center relative w-80 sm:w-96'>
+          <TitleLogo className="" />
         </Link>
         <div className="border-b w-full" />
-
       </div>
       <ArticlePage article={article} />
     </div>

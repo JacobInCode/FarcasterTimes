@@ -16,7 +16,7 @@ interface Source {
     hash: string;
 }
 
-const ArticlePage: React.FC<{article: Article | null}> = ({article : passedArticle}) => {
+const ArticlePage: React.FC<{ article: Article | null }> = ({ article: passedArticle }) => {
     const [article, setArticle] = useState<Article | null>(passedArticle);
 
     useEffect(() => {
@@ -36,12 +36,17 @@ const ArticlePage: React.FC<{article: Article | null}> = ({article : passedArtic
     if (!article) {
         return <div>Loading...</div>;
     }
-
+    
     return (
-        <div className='prose px-8'>
-            <h1>{article.headline}</h1>
-            <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`} alt={article.headline} width={500} height={500}/>
-            <Markdown className='prose'>
+        <div className='prose max-w-2xl'>
+            <h1 className='text-xl md:text-3xl'>{article.headline}</h1>
+            <div className='shrink-0 h-[200px] sm:h-[300px] md:w-full md:h-[400px] mt-4 mb-8 overflow-hidden relative z-0 '>
+                <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
+                    layout='fill'
+                    objectFit='cover'
+                    alt='' style={{ marginTop: 0, marginBottom: 0 }} />
+            </div>
+            <Markdown className='prose max-w-2xl'>
                 {article.body}
             </Markdown>
             <p className='font-bold mb-1'>Source Casts</p>

@@ -1,12 +1,6 @@
-import { Tinos } from 'next/font/google'
 import { format } from 'date-fns';
-
-// If loading a variable font, you don't need to specify the font weight
-const tinos = Tinos({
-  subsets: ['latin'],
-  style: 'normal',
-  weight: ["400", "700"],
-})
+import { tinos } from "./fonts";
+import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css";
 import TitleLogo from '@/components/TitleLogo';
@@ -30,9 +24,10 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={tinos.className}>
-      <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground px-4">
         <main className="min-h-screen flex flex-col items-center">
           {children}
+          <Analytics />
         </main>
       </body>
     </html>
