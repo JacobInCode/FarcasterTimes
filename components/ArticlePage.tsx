@@ -45,7 +45,7 @@ const ArticlePage: React.FC<{article: Article | null}> = ({article : passedArtic
                 {article.body}
             </Markdown>
             <p className='font-bold mb-1'>Source Casts</p>
-            <div className='flex flex-wrap space-y-1'>
+            <div className='flex flex-wrap space-y-1 max-w-36'>
                 {article.sources?.map((source) => (
                     <a href={`https://warpcast.com/${source.username}/${source.hash}`} target='_blank' rel='noreferrer'>
                         <p className='my-0 text-xs'>{`https://warpcast.com/${source.username}/${source.hash}`}</p>
@@ -53,6 +53,7 @@ const ArticlePage: React.FC<{article: Article | null}> = ({article : passedArtic
                 ))}
             </div>
         </div>
+
     );
 };
 
