@@ -101,6 +101,7 @@ const CitizenCard: React.FC = () => {
                         setUrls(newUrls as string[] | undefined[]);
                     }}
                   />))}
+                    {loading && <p className="text-xs w-full text-center">This could take a few minutes. Don't close this page.</p>}
                 <Button variant={"secondary"} className="h-8 bg-black text-white w-full" onClick={fetchData}>{loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} Publish</Button>
             </CardContent>
         </Card>

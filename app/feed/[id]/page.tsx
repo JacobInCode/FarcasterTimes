@@ -88,10 +88,10 @@ export default async function Index({ params }: { params: { id: string } }) {
         <a href="https://warpcast.com/balajis.eth/0x68d54993" target="_blank">Internet Native</a>
       </div>
       <div className='px-8 sm:px-32 py-3 lg:p-5 w-full flex justify-center border-b relative'>
-        <div className={cn(inter.className, "hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0")}>
-          <div className='text-xs font-bold'>{currentDate}</div>
-          <div className='text-xs'>Today's Date</div>
-        </div>
+      <div className={"hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0"}>
+            <div className={cn(inter.className,'text-xs font-bold')}>{currentDate}</div>
+            <div className={cn(inter.className,'text-xs')}>Today's Date</div>
+          </div>
         <TitleLogo className="" />
         <div className="hidden sm:inline absolute flex justify-end right-0 space-y-0.5 pr-3 md:px-0 p-6">
           <div className={cn(inter.className, 'text-xs font-medium')}><span className='mr-2'>ETH </span>${priceOfEthereum}</div>
