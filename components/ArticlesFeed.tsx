@@ -280,7 +280,7 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> 
             });
 
             const finalArticleObjectWithImages = await Promise.all(finalArticleObject.map(async (article: any) => {
-                const image = await generateImage(`Create an image that could be a New York Times cover photo for this headline : ${article.headline}`);
+                const image = await generateImage(`Create an image that could be a newspaper cover photo for this headline : ${article.headline}`);
                 return {
                     ...article,
                     image: image.imageUrl,
