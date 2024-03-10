@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // Define a custom 'serif' font family
+        serif: ['Georgia', 'Times New Roman', 'Times', 'serif'],
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -16,5 +20,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
