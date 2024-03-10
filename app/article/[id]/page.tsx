@@ -44,7 +44,7 @@ export default async function Index({ params }: { params: { id: string } }) {
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center mt-20 mb-32">
       <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-20 lg:px-36'>
-        <Link href="/" className='py-1 w-full flex justify-center relative w-96'>
+        <Link href="/" className='py-1 w-full flex justify-center relative max-w-96'>
           <TitleLogo className="h-10" />
         </Link>
         <div className="border-b w-full" />
