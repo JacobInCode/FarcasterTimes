@@ -280,7 +280,7 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> 
             });
 
             const finalArticleObjectWithImages = await Promise.all(finalArticleObject.map(async (article: any) => {
-                const image = await generateImage(`Create an image that could be a newspaper cover photo for this headline : ${article.headline}`);
+                const image = await generateImage(`Create an image to represent this newspaper headline : ${article.headline}`);
                 return {
                     ...article,
                     image: image.imageUrl,
@@ -313,7 +313,7 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> 
     return (
         <div>
             {articles === null ? (
-                <p>Loading articles...</p>
+                <p className='pt-10'>Loading daily articles... This could take several minutes.</p>
             ) : (
                 articles.map((article) => (
                     <ArticleComponent key={article.id} article={article} />

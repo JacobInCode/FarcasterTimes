@@ -82,7 +82,7 @@ export default async function Index({ params }: { params: { id: string } }) {
     <div className="flex-1 w-full flex flex-col gap-20 items-center mt-40 lg:mt-56 mb-32 relative">
       <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-20 lg:px-36'>
         <div className='pt-5 text-xs'>
-          A Balaji Srinivasan Bounty Inspired Creation
+          <a href="https://warpcast.com/balajis.eth/0x68d54993" target="_blank">A Balaji Srinivasan Bounty Inspired Creation</a>
         </div>
         <div className='px-8 sm:px-32 py-3 lg:p-6 w-full flex justify-center border-b relative'>
           <div className="hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0">
