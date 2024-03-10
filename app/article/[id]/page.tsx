@@ -40,7 +40,7 @@ export default async function Index({ params }: { params: { id: string } }) {
   article = articleData;
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-20 items-center mt-56 mb-32">
+    <div className="flex-1 w-full flex flex-col gap-20 items-center mt-20 mb-32">
       <ArticlePage article={article} />
     </div>
   );

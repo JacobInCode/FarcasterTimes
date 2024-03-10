@@ -202,7 +202,7 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null }> = ({ articles: load
 
     const fetchData = async () => {
         try {
-            console.log("Fetching data");
+
             // 1. Get all casts for channel for last 24 hours
             const feedRes = await client.fetchFeed('filter', {
                 filterType: FilterType.ChannelId,
@@ -211,15 +211,6 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null }> = ({ articles: load
                 withReplies: true,
                 limit: 100
             });
-
-            // const feedRes2 = await client.fetchFeed('filter', {
-            //     filterType: FilterType.ChannelId,
-            //     channelId: "ethereum",
-            //     withRecasts: true,
-            //     withReplies: false,
-            //     limit: 100,
-            //     cursor: 
-            // });
 
             console.log("HERE", feedRes);
 
@@ -341,8 +332,6 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article }) => {
                 <div className='flex-col md:flex-row flex md:space-x-10 my-0'>
                     <div className='md:w-1/2'>
                         <h3 className='text-xl'>{article.headline}</h3>
-
-
                         <p className='prose text-sm'>{article.body.slice(0, 300)}...</p>
                         <p className='prose text-xs'>{estimateReadingTime(article.body)} MIN READ</p>
                     </div>

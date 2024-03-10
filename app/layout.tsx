@@ -1,5 +1,5 @@
 import { Tinos } from 'next/font/google'
-import Image from 'next/image';
+import { format } from 'date-fns';
 
 // If loading a variable font, you don't need to specify the font weight
 const tinos = Tinos({
@@ -26,23 +26,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const currentDate = format(new Date(), 'EEEE, MMMM d');
+
   return (
     <html lang="en" className={tinos.className}>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
-        <div className='w-full fixed top-0 flex flex-col items-center justify-center bg-background md:px-36'>          
-
-        <div className='pt-5 text-xs'>          
-            A Balaji Srinivasan Bounty Inspired Creation
-          </div>
-          <div className='p-6 w-full flex justify-center border-b'>          
-            <TitleLogo className="" />
-          </div>
-          <header className="flex justify-center items-center w-full h-10 bg-primary border-b mx-24 border-black">
-            <h1 className="text-md font-bold">{"Ethereum News"}</h1>
-          </header>
-          <div className="w-full border-b mt-1 border-black"/>
-          </div>
           {children}
         </main>
       </body>
