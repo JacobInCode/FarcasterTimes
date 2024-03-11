@@ -26,7 +26,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const currentDate = format(new Date(), 'EEEE, MMMM d');
+  // const currentDate = format(new Date(), 'EEEE, MMMM d');
 
   return (
     <html lang="en" className={tinos.className}>

@@ -7,23 +7,59 @@ import ArticlesFeed from "@/components/ArticlesFeed";
 import ArticlePage from "@/components/ArticlePage";
 import TitleLogo from "@/components/TitleLogo";
 import Link from "next/link";
-
-function shouldGenerate(lastGeneration: any): boolean {
-  let generate = false;
-  if (lastGeneration) {
-    const createdAt = new Date(lastGeneration.created_at);
-    const now = new Date();
-    const diff = now.getTime() - createdAt.getTime();
-    const hours = diff / (1000 * 60 * 60);
-    if (hours > 24) {
-      generate = true;
-    }
-  } else {
-    generate = true;
-  }
-  return generate;
+import type { Metadata, ResolvingMetadata } from 'next'
+ 
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://falfj.com`
+  : "http://localhost:3000";
+
+const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: "Fully Automated Laissez-Faire Journalism",
+  description: "Automated news generation for internet natives",
+  openGraph: {
+    images: ['https://falfj.com/opengraph-image.png'],
+    width: 1200,
+    height: 600,
+  },
+  // image: new URL("/opengraph-image.png", defaultUrl),
+};
+ 
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
+
+  const { data: articleData, error: articlesError } = await supabaseAdmin
+  .from('articles')
+  .select('*')
+  .eq('id', params.id || '')
+  .single()
+ 
+  // fetch data
+  // const product = await fetch(`https://.../${id}`).then((res) => res.json())
+ 
+  // optionally access and extend (rather than replace) parent metadata
+  // const previousImages = (await parent).openGraph?.images || []
+
+  if (articlesError) {
+    return metadata;
+  }
+ 
+  return {
+    title: articleData.headline,
+    openGraph: {
+      images: [`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${articleData.image}`],
+    },
+  }
+}
 
 export default async function Index({ params }: { params: { id: string } }) {
   const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
