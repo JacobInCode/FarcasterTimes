@@ -14,7 +14,7 @@ export const metadata = {
   title: "Fully Automated Laissez-Faire Journalism",
   description: "Automated news generation for internet natives",
   openGraph: {
-    images: ['/opengraph-image.png'],
+    images: ['https://falfj.com/opengraph-image.png'],
   },
   // image: new URL("/opengraph-image.png", defaultUrl),
 };
