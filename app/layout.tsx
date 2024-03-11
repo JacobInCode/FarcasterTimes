@@ -13,7 +13,10 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Fully Automated Laissez-Faire Journalism",
   description: "Automated news generation for internet natives",
-  image: new URL("/images/opengraph-image.png", defaultUrl),
+  openGraph: {
+    images: ['/opengraph-image.png'],
+  },
+  // image: new URL("/opengraph-image.png", defaultUrl),
 };
 
 export default function RootLayout({
