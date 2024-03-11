@@ -47,7 +47,7 @@ export async function submitArticle(articles: Article[]) {
         // Successfully added the article
         const newArticle = await response.json();
         console.log('Article submitted successfully:', newArticle);
-        return { error: false, data: newArticle };
+        return { error: false, data: JSON.parse(newArticle) };
     } catch (error) {
         // Handle network errors
         console.error('Failed to submit article:', error);

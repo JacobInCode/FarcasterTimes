@@ -21,18 +21,18 @@ export async function POST(request: Request) {
         
         // insert new articles to supabase db
         const data = await request.json();
-        const articles = z.array(articleSchema).parse(data);
-        const insertData = articles.map(article => ({
+        const article = articleSchema.parse(data);
+        const articleData = {
             body: article.body,
             headline: article.headline,
             sources: article.sources,
             channel_id: article.channel_id,
             image: article.image,
-        }));
+        };
         const { data: newArticles, error } = await supabaseAdmin
             .from('articles')
-            .insert(insertData)
-            .select();
+            .insert(articleData);
+            .select()
         if (error) {
             throw error;
         }

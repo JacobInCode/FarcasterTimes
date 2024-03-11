@@ -70,9 +70,10 @@ const CitizenCard: React.FC = () => {
                 };
             
 
-            await submitArticle([finalArticleObjectWithImage])
+            const {data} = await submitArticle([finalArticleObjectWithImage])
 
-            router.refresh()
+            console.log("PARSEDARTICLES", data);    
+            router.push(`/article/${data[0].id}`);
             
         } catch (error) {
             console.error('Error fetching articles:', error);
