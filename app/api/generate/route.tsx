@@ -41,7 +41,8 @@ export async function POST(
 
         const { model, max_tokens, messages, temperature, top_p, frequency_penalty, presence_penalty } = schema.parse(json);
 
-        console.log("model", model)
+        console.log("model", model, "max_tokens", max_tokens, "messages", messages, "temperature", temperature, "top_p", top_p, "frequency_penalty", frequency_penalty, "presence_penalty", presence_penalty)
+        
         const chatMessages: ChatCompletionRequestMessage[] = messages.map((message: any) => {
             return {
                 role: message.role as ChatCompletionRequestMessageRoleEnum,
@@ -61,7 +62,7 @@ export async function POST(
         })
 
         const res = await response.json()
-        console.log("response", res.choices[0].message.content, JSON.stringify(res.choices[0].content))
+        console.log("response", res)
 
         // return stream response (SSE)
         return new Response(JSON.stringify(res.choices[0].message.content), { status: 200 });
