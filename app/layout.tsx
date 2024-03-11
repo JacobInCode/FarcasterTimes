@@ -15,6 +15,8 @@ export const metadata = {
   description: "Automated news generation for internet natives",
   openGraph: {
     images: ['https://falfj.com/opengraph-image.png'],
+    width: 1200,
+    height: 600,
   },
   // image: new URL("/opengraph-image.png", defaultUrl),
 };
