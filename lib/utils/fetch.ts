@@ -158,6 +158,25 @@ export async function callChatAPI(casts: string) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        // const data = response.body as ReadableStream<Uint8Array>;
+        // const reader = data.getReader();
+        // const decoder = new TextDecoder();
+        // let content = '';
+
+        // while (true) {
+        //     try {
+        //         const { value, done } = await reader.read();
+        //         if (done) break;
+
+        //         content += decoder.decode(value, { stream: true })
+
+        //     } catch (readError) {
+        //         console.error('Error reading data stream:', readError);
+        //     }
+        // }
+
+        // return content
+
         const data = await response.json();
         console.log(data); // Process the response data as needed
         // If your response is a stream, handle accordingly
@@ -242,3 +261,41 @@ export async function fetchFeed(channelId: string): Promise<any> {
         throw error;
     }
 }
+
+// export const fetchAI = async () => {
+
+//     try {
+
+//         const response = await fetch(`/api/ai`, {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify(body),
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+
+//         const data = response.body as ReadableStream<Uint8Array>;
+//         const reader = data.getReader();
+//         const decoder = new TextDecoder();
+//         let content = '';
+
+//         while (true) {
+//             try {
+//                 const { value, done } = await reader.read();
+//                 if (done) break;
+
+//                 content += decoder.decode(value, { stream: true })
+
+//             } catch (readError) {
+//                 console.error('Error reading data stream:', readError);
+//             }
+//         }
+
+//         return content
+//     } catch (error) {
+//         console.error('Error during data streaming:', error);
+//         return null;
+//     }
+// };
