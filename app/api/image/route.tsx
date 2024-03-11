@@ -32,7 +32,7 @@ export async function POST(
 
         const { prompt } = schema.parse(json);
 
-        const image = await openai.images.generate({ model: "dall-e-3", prompt, style: 'natural', response_format: 'b64_json', size:"1792x1024" });
+        const image = await openai.images.generate({ model: "dall-e-3", prompt, style: 'vivid', response_format: 'b64_json', size:"1792x1024" });
 
         // add image to supabase storage cover_photos 
 

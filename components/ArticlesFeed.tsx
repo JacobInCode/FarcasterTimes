@@ -237,10 +237,10 @@ const ArticleComponentSmall: React.FC<ArticleComponentProps> = ({ article, idx, 
                         <h3 className='text-xl mt-0 leading-[1.5rem]'>{article.headline}</h3>
                     </Link>
 
-                    <Markdown className='prose prose text-sm leading-[1.2rem] mb-3'>
+                    <Markdown className='prose prose text-sm leading-[1.2rem] mb-1.5'>
                         {sliceAtNextSpace(article.body, 150) + "..."}
                     </Markdown>
-                    <p className={cn(inter.className, 'prose text-[11px] mt-0')}>{estimateReadingTime(article.body)} MIN READ</p>
+                    <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(article.body)} MIN READ</p>
                 </div>
 
             </div>
@@ -258,15 +258,16 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article, idx, isLas
 
                         <h3 className='text-xl mt-0 leading-[1.5rem]'>{article.headline}</h3>
                         {/* <p className='prose text-sm leading-[1.2rem] mb-3'>{article.body.slice(0, 150)}...</p> */}
-                        <Markdown className='prose prose text-sm leading-[1.2rem] mb-3'>
+                        <Markdown className='prose prose text-sm leading-[1.2rem] mb-1.5'>
                             {sliceAtNextSpace(article.body, 150) + "..."}
                         </Markdown>
-                        <p className={cn(inter.className, 'prose text-[11px] mt-0')}>{estimateReadingTime(article.body)} MIN READ</p>
+                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(article.body)} MIN READ</p>
                     </Link>
 
                     {nextArticle && <Link href={`/article/${nextArticle.id}`} className='no-underline'>
-                        <p className='prose text-sm font-bold text-black leading-[1.3rem] pt-5 mb-3 border-t'>{nextArticle.headline}</p>
-                        <p className={cn(inter.className, 'prose text-[11px] mt-0')}>{estimateReadingTime(nextArticle.body)} MIN READ</p>        </Link>
+                        <p className='prose text-sm font-bold text-black leading-[1.3rem] pt-5 mb-3 border-t mb-1.5'>{nextArticle.headline}</p>
+                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(nextArticle.body)} MIN READ</p>        
+                        </Link>
                     }
                 </div>
                 <Link href={`/article/${article.id}`} className='no-underline'>

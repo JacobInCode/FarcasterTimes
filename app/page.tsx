@@ -23,11 +23,11 @@ function shouldGenerate(lastGeneration: any): boolean {
   return generate;
 }
 
-export const revalidate = 0 // revalidate at most every hour
+// export const revalidate = 0 // revalidate at most every hour
 
 export default async function Index() {
   const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
-  let channelId = "trending";
+  let channelId = "citizen";
   let articles = null;
 
   const response = await fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=ETH', {
@@ -81,10 +81,10 @@ export default async function Index() {
   return (
     <div className="flex-1 w-full flex flex-col gap-7 items-center mb-16 relative max-w-6xl">
       <div className='w-full top-0 flex flex-col items-center justify-center bg-background max-w-6xl'>
-        <div className={cn(inter.className, 'pt-2 text-xs')}>
+        <div className={cn(inter.className, 'pt-2 text-[11px]')}>
           <a href="https://warpcast.com/balajis.eth/0x68d54993" target="_blank">Internet Native</a>
         </div>
-        <div className='px-8 sm:px-32 py-3 lg:p-5 w-full flex justify-center border-b relative'>
+        <div className='px-8 sm:px-32 py-3 lg:p-5 w-full flex justify-center border-b border-gray-200 relative'>
           <div className={"hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0"}>
             <div className={cn(inter.className,'text-xs font-bold')}>{currentDate}</div>
             <div className={cn(inter.className,'text-xs')}>Today's Date</div>
@@ -94,18 +94,18 @@ export default async function Index() {
             <div className={cn(inter.className, 'text-xs font-medium')}><span className='mr-2'>ETH </span>${priceOfEthereum}</div>
           </div>
         </div>
-        <header className="flex space-x-6 justify-center items-center w-full h-10 bg-primary border-b mx-24 border-black">
-        <Link href="/feed/citizen" className='flex space-x-1 items-center'>
-          <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "citizen" })}>{"Citizen"}</h1><ChevronDownIcon className="h-2 w-2" />
+        <header className="flex space-x-6 justify-center items-center w-full h-12 bg-primary border-b mx-24 border-black">
+        <Link href="/feed/citizen" className='flex space-x-2 items-center'>
+          <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "citizen" })}>{"Citizen"}</h1><ChevronDownIcon className="h-3 w-3" />
         </Link>
-          <Link href="/feed/trending" className='flex space-x-1 items-center'>
-            <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "trending" })}>{"Trending"}</h1><ChevronDownIcon className="h-2 w-2" />
+          <Link href="/feed/trending" className='flex space-x-2 items-center'>
+            <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "trending" })}>{"Trending"}</h1><ChevronDownIcon className="h-3 w-3" />
           </Link>
-          <Link href="/feed/ethereum" className='flex space-x-1 items-center'>
-            <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "ethereum" })}>{"Ethereum"}</h1><ChevronDownIcon className="h-2 w-2" />
+          <Link href="/feed/ethereum" className='flex space-x-2 items-center'>
+            <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "ethereum" })}>{"Ethereum"}</h1><ChevronDownIcon className="h-3 w-3" />
           </Link>
-          <Link href="/feed/farcaster" className='flex space-x-1 items-center'>
-            <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "farcaster" })}>{"Farcaster"}</h1><ChevronDownIcon className="h-2 w-2" />
+          <Link href="/feed/farcaster" className='flex space-x-2 items-center'>
+            <h1 className={cn(inter.className, "text-xs", { "font-medium": channelId === "farcaster" })}>{"Farcaster"}</h1><ChevronDownIcon className="h-3 w-3" />
           </Link>
         </header>
         <div className="w-full border-b mt-0.5 border-black" />
