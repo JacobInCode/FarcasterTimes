@@ -65,7 +65,7 @@ export default async function Index() {
         .select('*')
         .eq('channel_id', channelId)
         .order('created_at', { ascending: false })
-        .limit(10)
+        .limit(9)
 
       if (articlesError) {
         console.error(articlesError);
