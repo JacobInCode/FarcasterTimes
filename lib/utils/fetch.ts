@@ -1,4 +1,5 @@
 import { Article } from "@/types";
+import { CastsResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 export async function generateImage(prompt: string): Promise<any> {
@@ -188,6 +189,56 @@ export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any
         return data as CastResponse[];
     } catch (error) {
         console.error('Error looking up cast:', error);
+        throw error;
+    }
+};
+
+export async function fetchBulkCasts(hashes: string[][]): Promise<any> {
+    try {
+
+        console.log("hashes", hashes)
+        const response = await fetch('/api/fetchBulkCasts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any other necessary headers, such as authorization tokens
+            },
+            body: JSON.stringify({hashes}),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data); // Process the response data as needed
+        return data as CastsResponse[];
+    } catch (error) {
+        console.error('Error looking up cast:', error);
+        throw error;
+    }
+}
+
+export async function fetchFeed(channelId: string): Promise<any> {
+    try {
+        const response = await fetch('/api/fetchFeed', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any other necessary headers, such as authorization tokens
+            },
+            body: JSON.stringify({channelId}),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data); // Process the response data as needed
+        return data;
+    } catch (error) {
+        console.error('Error fetching feed:', error);
         throw error;
     }
 }

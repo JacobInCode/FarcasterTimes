@@ -82,7 +82,7 @@ const CitizenCard: React.FC = () => {
     };
 
     return (
-        <Card className={cn(inter.className, "bg-gray-100 border-gray-200 flex-col w-full space-y-4 md:space-y-0 flex md:flex-row md:space-x-10 max-w-2xl p-5 rounded-sm")}>
+        <Card className={cn(inter.className, "bg-gray-200 border-gray-300 flex-col w-full space-y-4 md:space-y-0 flex md:flex-row md:space-x-10 max-w-2xl p-5 rounded-sm")}>
             <CardHeader className="w-[300px] p-0 space-y-3">
                 <CardTitle>Citizen Journalism</CardTitle>
                 <CardDescription>The collection, dissemination, and analysis of news and information by the general public, especially by means of the internet.</CardDescription>

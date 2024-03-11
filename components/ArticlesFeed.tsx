@@ -191,7 +191,7 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> 
                 ) : (
                     <div className='flex space max-w-7xl'>
                         <div className='w-2/3 border-r pr-4'>
-                            {channelId === 'citizen' && <div className='p-8'><CitizenCard /></div>}
+                            {channelId === 'citizen' && <div className='p-8 bg-gray-100 border border-gray-200 mb-4'><CitizenCard /></div>}
                             {loadedArticles.slice(0, loadedArticles.length * 2 / 3).filter((_, idx) => idx % 2 === 0).map((article, idx) => (
                                 <ArticleComponent key={article.id} article={article} nextArticle={loadedArticles?.slice(0, loadedArticles.length * 2 / 3).filter((_, idx) => idx % 2 !== 0)?.[idx]} idx={idx} isLastIndex={idx === loadedArticles.slice(0, loadedArticles.length * 1 / 3).length - 1} />
                             ))}
@@ -223,11 +223,12 @@ const ArticleComponentSmall: React.FC<ArticleComponentProps> = ({ article, idx, 
             <div className={cn('flex-col flex space-y-4 my-0', { 'border-b': !isLastIndex })}>
                 <Link href={`/article/${article.id}`} className='no-underline'>
 
-                    {<div className={cn('h-[180px] sm:h-[260px] md:h-[300px] lg:h-[260px] my-0 overflow-hidden relative z-0', { "lg:hidden": idx === 1 })}>
+                    {<div className={cn('h-[180px] sm:h-[260px] md:h-[300px] lg:h-[260px] my-0 overflow-hidden relative z-0 bg-gray-100', { "lg:hidden": idx === 1 })}>
                         <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
                             layout='fill'
                             objectFit='cover'
-                            alt='' style={{ marginTop: 0, marginBottom: 0 }} />
+                            alt='' style={{ marginTop: 0, marginBottom: 0 }} 
+                            />
                     </div>}
                 </Link>
                 <div className='flex flex-col justify-start'>
@@ -269,7 +270,7 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article, idx, isLas
                     }
                 </div>
                 <Link href={`/article/${article.id}`} className='no-underline'>
-                    <div className='shrink-0 md:w-[470px] md:h-[320px] my-0 overflow-hidden relative z-0 '>
+                    <div className='shrink-0 md:w-[470px] md:h-[320px] my-0 overflow-hidden relative z-0 bg-gray-100'>
                         <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
                             layout='fill'
                             objectFit='cover'
