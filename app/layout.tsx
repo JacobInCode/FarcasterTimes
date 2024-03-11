@@ -6,7 +6,7 @@ import "./globals.css";
 import TitleLogo from '@/components/TitleLogo';
 
 const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
+  ? `https://falfj.com`
   : "http://localhost:3000";
 
 export const metadata = {
