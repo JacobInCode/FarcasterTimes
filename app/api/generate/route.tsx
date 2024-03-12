@@ -1,7 +1,4 @@
-// import { getServerSession } from "next-auth"
 import * as z from "zod"
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai-edge';
 import { createBrowserClient } from "@supabase/ssr";
@@ -75,4 +72,5 @@ export async function POST(
         return new Response(null, { status: 500 })
     }
 }
+
 

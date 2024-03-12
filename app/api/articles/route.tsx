@@ -11,6 +11,7 @@ const articleSchema = z.object({
     sources: z.array(z.any()),
     channel_id: z.string(),
     image: z.string().optional(),
+    audio: z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -28,6 +29,7 @@ export async function POST(request: Request) {
             sources: article.sources,
             channel_id: article.channel_id,
             image: article.image,
+            audio: article.audio,
         }));
         const { data: newArticles, error } = await supabaseAdmin
             .from('articles')

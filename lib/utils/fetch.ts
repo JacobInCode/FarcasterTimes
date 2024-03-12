@@ -2,6 +2,30 @@ import { Article } from "@/types";
 import { CastsResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
+export async function generateSpeech(input: string): Promise<any> {
+    try {
+        const response = await fetch('/api/audio', { // Replace '/api/your-endpoint' with the actual endpoint path
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any other necessary headers, such as authorization tokens
+            },
+            body: JSON.stringify({ input }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data); // Process the response data as needed
+        return data;
+    } catch (error) {
+        console.error('Error generating audio:', error);
+        throw error;
+    }
+}
+
 export async function generateImage(prompt: string): Promise<any> {
     try {
         const response = await fetch('/api/image', { // Replace '/api/your-endpoint' with the actual endpoint path

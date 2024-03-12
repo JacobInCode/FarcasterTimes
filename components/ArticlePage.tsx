@@ -42,6 +42,11 @@ const ArticlePage: React.FC<{ article: Article | null }> = ({ article: passedArt
                     objectFit='cover'
                     alt='' style={{ marginTop: 0, marginBottom: 0 }} />
             </div>
+            {article?.audio && (
+                <div className="fixed left-4 bottom-4">
+                    <audio controls src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article?.audio}`} className="shadow-lg rounded-full border border-gray-300" />
+                </div>
+            )}
             {article.created_at && <p className={cn(inter.className, 'text-[10px] w-full text-right')}>Generated {new Date(article.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
             <Markdown className='prose max-w-2xl'>
                 {article.body}

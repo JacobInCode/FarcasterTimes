@@ -5,14 +5,6 @@ export interface Article {
     sources?: any[];
     readTime?: number;
     image?: string;
-    created_at?: Date;    
+    created_at?: Date;   
+    audio?: string; 
 }
-
-type Cast = {
-    text: string;
-    author_unique_username: string;
-    author_display_name: string;
-    author_id: string;
-    cast_id: string;
-    image_url: string;
-};

@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { describeImage, formatArticleWithAuthorLinks, generateImage, lookUpCastByHashOrWarpcastUrl, parseArticleToJSON, submitArticle, writeArticle } from "@/lib/utils/fetch";
+import { describeImage, generateSpeech, formatArticleWithAuthorLinks, generateImage, lookUpCastByHashOrWarpcastUrl, parseArticleToJSON, submitArticle, writeArticle } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
 import { Expand, ExpandIcon, Loader2Icon, Minimize, MinusCircle, PlusIcon } from "lucide-react";
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
@@ -53,9 +53,9 @@ const CitizenCard: React.FC = () => {
             console.log("HERE", castsRes[0].cast.embeds[0]);
             const imageDescriptions = await Promise.all(castsRes.map(c => c.cast).map((cast: any) => {
 
-                if (cast?.embeds[0] && (cast.embeds[0].url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
+                if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
                   return describeImage(cast.embeds[0].url)
-                } else if (cast?.embeds[1] && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
+                } else if (cast?.embeds[1]?.url && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
                     return describeImage(cast.embeds[1].url)
                 } else if (cast?.frames?.[0]?.image) {
                     return describeImage(cast.frames[0].image)
@@ -89,12 +89,13 @@ const CitizenCard: React.FC = () => {
             };
 
             const image = await generateImage(`Create an image to represent this newspaper headline : ${finalArticleObject.headline}`);
+            const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${finalArticleObject.body}`);
 
             const finalArticleObjectWithImage = {
                 ...finalArticleObject,
                 image: image.imageUrl,
+                audio: audio.speechUrl
             };
-
 
             const { data } = await submitArticle([finalArticleObjectWithImage])
 
