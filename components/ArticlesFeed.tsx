@@ -162,11 +162,15 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> 
             // // setArticles(finalArticleObject);
 
             // await submitArticle(finalArticleObjectWithImages)
-            
+
         } catch (error) {
             console.error('Error fetching articles:', error);
         }
     };
+
+    const endNumber = channelId === 'citizen' ? 10 : 9;
+    const loadedArticlesFirstNine = loadedArticles?.slice(0, endNumber) || [];
+    const loadedArticlesAfterNine = loadedArticles?.slice(endNumber, loadedArticles.length) || [];
 
     return (
         <div className='min-h-screen'>
@@ -189,20 +193,26 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null, channelId: string }> 
                 {loadedArticles === null ? (
                     channelId === 'citizen' ? <CitizenCard /> : <p className='pt-10'>Loading daily articles... This could take several minutes.</p>
                 ) : (
-                    <div className='flex space max-w-7xl'>
-                        <div className='w-2/3 border-r pr-4'>
-                            {channelId === 'citizen' && <div className='p-8 bg-gray-100 border border-gray-200 mb-4'><CitizenCard /></div>}
-                            {loadedArticles.slice(0, loadedArticles.length * 2 / 3).filter((_, idx) => idx % 2 === 0).map((article, idx) => (
-                                <ArticleComponent key={article.id} article={article} nextArticle={loadedArticles?.slice(0, loadedArticles.length * 2 / 3).filter((_, idx) => idx % 2 !== 0)?.[idx]} idx={idx} isLastIndex={idx === loadedArticles.slice(0, loadedArticles.length * 1 / 3).length - 1} />
-                            ))}
+                    <div className='flex flex-col max-w-7xl'>
+                        <div className='flex space max-w-7xl'>
+                            <div className='w-2/3 border-r pr-4'>
+                                {channelId === 'citizen' && <div className='p-8 bg-gray-100 border border-gray-200 mb-4'><CitizenCard /></div>}
+                                {loadedArticlesFirstNine.slice(0, loadedArticlesFirstNine.length * 2 / 3).filter((_, idx) => idx % 2 === 0).map((article, idx) => (
+                                    <ArticleComponent key={article.id} article={article} nextArticle={loadedArticlesFirstNine?.slice(0, loadedArticlesFirstNine.length * 2 / 3).filter((_, idx) => idx % 2 !== 0)?.[idx]} idx={idx} isLastIndex={idx === loadedArticlesFirstNine.slice(0, loadedArticlesFirstNine.length * 1 / 3).length - 1} />
+                                ))}
+                            </div>
+                            <div className='w-1/3 pl-4'>
+                                {loadedArticlesFirstNine.slice(loadedArticlesFirstNine.length * 2 / 3, loadedArticlesFirstNine.length).map((article, idx) => (
+                                    <ArticleComponentSmall key={article.id} article={article} idx={idx} isLastIndex={idx === loadedArticlesFirstNine.slice(loadedArticlesFirstNine.length * 2 / 3, loadedArticlesFirstNine.length).length - 1} />
+                                ))}
+                            </div>
                         </div>
-                        <div className='w-1/3 pl-4'>
-                            {loadedArticles.slice(loadedArticles.length * 2 / 3, loadedArticles.length).map((article, idx) => (
-                                <ArticleComponentSmall key={article.id} article={article} idx={idx} isLastIndex={idx === loadedArticles.slice(loadedArticles.length * 2 / 3, loadedArticles.length).length - 1} />
+                        <div className='grid grid-cols-5 w-full mt-20'>
+                            {loadedArticlesAfterNine.slice(loadedArticlesAfterNine.length * 2 / 3, loadedArticlesAfterNine.length).map((article, idx) => (
+                                <ArticleComponentGrid key={article.id} article={article} idx={idx} isLastIndex={idx === loadedArticlesAfterNine.slice(loadedArticlesAfterNine.length * 2 / 3, loadedArticlesAfterNine.length).length - 1} />
                             ))}
                         </div>
                     </div>
-
                 )}
             </div>
         </div>
@@ -217,6 +227,33 @@ interface ArticleComponentProps {
     nextArticle?: Article;
 }
 
+const ArticleComponentGrid: React.FC<ArticleComponentProps> = ({ article, idx, isLastIndex }) => {
+    return (
+        <div className='prose max-w-[200px] w-[200px] pb-6'>
+            <div className={cn('flex-col flex space-y-4 my-0')}>
+                <Link href={`/article/${article.id}`} className='no-underline'>
+                    {<div className={cn('h-[200px] w-[200px] my-0 overflow-hidden relative z-0 bg-gray-100')}>
+                        <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
+                            // placeholder="blur"
+                            layout='fill'
+                            objectFit='cover'
+                            alt='' style={{ marginTop: 0, marginBottom: 0 }}
+                        />
+                    </div>}
+                </Link>
+                <div className='flex flex-col justify-start'>
+                    <Link href={`/article/${article.id}`} className='no-underline'>
+                        <h3 className='text-sm mt-0 leading-[1.2rem]'>{article.headline}</h3>
+                    </Link>
+                    <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(article.body)} MIN READ</p>
+                </div>
+
+            </div>
+        </div>
+
+    );
+};
+
 const ArticleComponentSmall: React.FC<ArticleComponentProps> = ({ article, idx, isLastIndex }) => {
     return (
         <div className='prose max-w-6xl pb-6'>
@@ -225,11 +262,11 @@ const ArticleComponentSmall: React.FC<ArticleComponentProps> = ({ article, idx, 
 
                     {<div className={cn('h-[180px] sm:h-[260px] md:h-[300px] lg:h-[260px] my-0 overflow-hidden relative z-0 bg-gray-100', { "lg:hidden": idx === 1 })}>
                         <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
-                        // placeholder="blur"
+                            // placeholder="blur"
                             layout='fill'
                             objectFit='cover'
-                            alt='' style={{ marginTop: 0, marginBottom: 0 }} 
-                            />
+                            alt='' style={{ marginTop: 0, marginBottom: 0 }}
+                        />
                     </div>}
                 </Link>
                 <div className='flex flex-col justify-start'>
@@ -267,8 +304,8 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article, idx, isLas
 
                     {nextArticle && <Link href={`/article/${nextArticle.id}`} className='no-underline'>
                         <p className='prose text-sm font-bold text-black leading-[1.3rem] pt-5 mb-3 border-t mb-1.5'>{nextArticle.headline}</p>
-                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(nextArticle.body)} MIN READ</p>        
-                        </Link>
+                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(nextArticle.body)} MIN READ</p>
+                    </Link>
                     }
                 </div>
                 <Link href={`/article/${article.id}`} className='no-underline'>
@@ -278,7 +315,7 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article, idx, isLas
                             objectFit='cover'
                             // placeholder="blur"
                             alt='' style={{ marginTop: 0, marginBottom: 0 }} />
-                            
+
                     </div>
                 </Link>
 

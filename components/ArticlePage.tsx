@@ -3,13 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 import Image from 'next/image';
-
-interface Article {
-    headline: string;
-    image: string;
-    body: string;
-    sources?: Source[];
-}
+import { Article } from '@/types';
+import { cn } from '@/lib/utils';
+import { inter } from '@/app/fonts';
 
 interface Source {
     username: string;
@@ -36,16 +32,17 @@ const ArticlePage: React.FC<{ article: Article | null }> = ({ article: passedArt
     if (!article) {
         return <div>Loading...</div>;
     }
-    
+
     return (
         <div className='prose max-w-2xl'>
             <h1 className='text-xl md:text-3xl'>{article.headline}</h1>
-            <div className='shrink-0 h-[200px] sm:h-[300px] md:w-full md:h-[400px] mt-4 mb-8 overflow-hidden relative z-0 '>
+            <div className='shrink-0 h-[200px] sm:h-[300px] md:w-full md:h-[400px] mt-4 mb-2 overflow-hidden relative z-0 '>
                 <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
                     layout='fill'
                     objectFit='cover'
                     alt='' style={{ marginTop: 0, marginBottom: 0 }} />
             </div>
+            {article.created_at && <p className={cn(inter.className, 'text-[10px] w-full text-right')}>Generated {new Date(article.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
             <Markdown className='prose max-w-2xl'>
                 {article.body}
             </Markdown>

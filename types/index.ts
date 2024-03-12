@@ -5,4 +5,5 @@ export interface Article {
     sources?: any[];
     readTime?: number;
     image?: string;
+    created_at?: Date;    
 }

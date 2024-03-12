@@ -32,7 +32,6 @@ export default async function Index({ params }: { params: { id: string } }) {
 
   console.log("channelId", channelId);
 
-
   const response = await fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=ETH', {
     method: 'GET',
     // @ts-ignore
@@ -68,7 +67,7 @@ export default async function Index({ params }: { params: { id: string } }) {
         .select('*')
         .eq('channel_id', channelId)
         .order('created_at', { ascending: false })
-        .limit(9)
+        .limit(29)
 
       if (articlesError) {
         console.error(articlesError);
