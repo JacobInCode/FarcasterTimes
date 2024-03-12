@@ -2,7 +2,7 @@
 import * as z from "zod"
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai-edge';
 import { createBrowserClient } from "@supabase/ssr";
-// export const maxDuration = 300; // This function can run for a maximum of 300 seconds
+export const maxDuration = 300; // This function can run for a maximum of 300 seconds
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge'

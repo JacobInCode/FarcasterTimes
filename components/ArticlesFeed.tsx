@@ -225,6 +225,7 @@ const ArticleComponentSmall: React.FC<ArticleComponentProps> = ({ article, idx, 
 
                     {<div className={cn('h-[180px] sm:h-[260px] md:h-[300px] lg:h-[260px] my-0 overflow-hidden relative z-0 bg-gray-100', { "lg:hidden": idx === 1 })}>
                         <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
+                        // placeholder="blur"
                             layout='fill'
                             objectFit='cover'
                             alt='' style={{ marginTop: 0, marginBottom: 0 }} 
@@ -275,7 +276,9 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article, idx, isLas
                         <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
                             layout='fill'
                             objectFit='cover'
+                            // placeholder="blur"
                             alt='' style={{ marginTop: 0, marginBottom: 0 }} />
+                            
                     </div>
                 </Link>
 
