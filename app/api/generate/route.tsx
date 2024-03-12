@@ -12,7 +12,7 @@ const schema = z.object({
         max_tokens: z.number(),
         messages: z.array(z.object({
             role: z.string(),
-            content: z.string()
+            content: z.any()
         })),
         temperature: z.number(),
         top_p: z.number(),

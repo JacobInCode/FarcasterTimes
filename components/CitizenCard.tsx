@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { formatArticleWithAuthorLinks, generateImage, lookUpCastByHashOrWarpcastUrl, parseArticleToJSON, submitArticle, writeArticle } from "@/lib/utils/fetch";
+import { describeImage, formatArticleWithAuthorLinks, generateImage, lookUpCastByHashOrWarpcastUrl, parseArticleToJSON, submitArticle, writeArticle } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
 import { Expand, ExpandIcon, Loader2Icon, Minimize, MinusCircle, PlusIcon } from "lucide-react";
 import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
@@ -50,9 +50,34 @@ const CitizenCard: React.FC = () => {
             const mappedAndFilteredCasts = castsRes.map(c => c.cast).map((cast: any) => { return { text: cast.text, author_unique_username: cast.author.username, author_display_name: cast.author.display_name, author_id: cast.author.fid, cast_id: cast.hash } })
             // console.log(castsRes.map((res) => res.result.casts.map((cast: any) => {return {text: cast.text, author_display_name: cast.author.display_name, author_id: cast.author.fid, post_id: cast.hash}})));
 
-            const articleRes = await writeArticle(JSON.stringify(mappedAndFilteredCasts));
+            console.log("HERE", castsRes[0].cast.embeds[0]);
+            const imageDescriptions = await Promise.all(castsRes.map(c => c.cast).map((cast: any) => {
 
-            console.log(articleRes);
+                if (cast?.embeds[0] && (cast.embeds[0].url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
+                  return describeImage(cast.embeds[0].url)
+                } else if (cast?.embeds[1] && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
+                    return describeImage(cast.embeds[1].url)
+                } else if (cast?.frames?.[0]?.image) {
+                    return describeImage(cast.frames[0].image)
+                } else {
+                    return Promise.resolve(null)
+                }
+                 
+        }));
+
+            // console.log(imageDescriptions);
+
+            const castsWithImageDescs = mappedAndFilteredCasts.map((cast: any, index: number) => {
+                return { ...cast, text: `CAST TEXT: ${cast.text}${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}`}
+            })
+
+            // console.log("castsWithImageDescs", castsWithImageDescs);
+
+            // add image description
+
+            const articleRes = await writeArticle(JSON.stringify(castsWithImageDescs));
+
+            // console.log(articleRes);
 
             // const addedLinks = articlesRes.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
 
@@ -73,7 +98,7 @@ const CitizenCard: React.FC = () => {
 
             const { data } = await submitArticle([finalArticleObjectWithImage])
 
-            console.log("PARSEDARTICLES", data);
+            // console.log("PARSEDARTICLES", data);
             router.push(`/article/${data[0].id}`);
 
         } catch (error) {

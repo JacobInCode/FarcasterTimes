@@ -77,7 +77,54 @@ export function formatArticleWithAuthorLinks(article: string): string {
     });
 }
 
+export async function describeImage(image_url: string) {
+    
+    const requestBody = {
+        "model": "gpt-4-vision-preview",
+        "messages": [
+            {
+                role: "user",
+                content: [
+                  { type: "text", text: "What’s in this image?" },
+                  {
+                    type: "image_url",
+                    image_url
+                  },
+                ],
+              },
+        ],
+        "temperature": 0.4,
+        "max_tokens": 4095,
+        "top_p": 0.18,
+        "frequency_penalty": 0,
+        "presence_penalty": 0.31
+    };
+
+    try {
+        const response = await fetch('/api/generate', { // Use the correct endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any additional headers as needed, such as authorization headers
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("IMAGE desc ", data); // Process the response data as needed
+        // If your response is a stream, handle accordingly
+        return data;
+    } catch (error) {
+        console.error('Error calling the API:', error);
+    }
+}
+
 export async function writeArticle(casts: string) {
+
     const requestBody = {
         "model": "gpt-4-turbo-preview",
         "messages": [
