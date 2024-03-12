@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button"
 import { describeImage, generateSpeech, formatArticleWithAuthorLinks, generateImage, lookUpCastByHashOrWarpcastUrl, parseArticleToJSON, submitArticle, writeArticle } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
 import { Expand, ExpandIcon, Loader2Icon, Minimize, MinusCircle, PlusIcon } from "lucide-react";
-import { CastParamType, NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 const CitizenCard: React.FC = () => {
