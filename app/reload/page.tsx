@@ -69,8 +69,12 @@ const Reload: React.FC = () => {
 
             // 2. Organize cast hashes by topic
             let topicOrganizedHashes = await callChatAPI(casts);
+
             if (topicOrganizedHashes.includes('```json')) {
-                topicOrganizedHashes = topicOrganizedHashes.replace(/\`\`\`json\n|\`\`\`/g, '').trim().match(/\[(.|\s)*?\]/)
+                topicOrganizedHashes = topicOrganizedHashes.replace(/\`\`\`json\n|\`\`\`/g, '').trim()
+                if (!!topicOrganizedHashes.match(/\[(.|\s)*?\]/)?.[0]) {
+                    topicOrganizedHashes = topicOrganizedHashes.match(/\[(.|\s)*?\]/)?.[0]!;
+                }
             }
 
             let parsedHashes = JSON.parse(topicOrganizedHashes);

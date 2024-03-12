@@ -114,12 +114,30 @@ export async function describeImage(image_url: string) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        console.log("IMAGE desc ", data); // Process the response data as needed
+        const data = response.body as ReadableStream<Uint8Array>;
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let content = '';
+
+        while (true) {
+            try {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                content += decoder.decode(value, { stream: true })
+
+            } catch (readError) {
+                console.error('Error reading data stream:', readError);
+            }
+        }
+
+        // const data = await response.json();
+        console.log("IMAGE desc ", content); // Process the response data as needed
         // If your response is a stream, handle accordingly
-        return data;
+        return content;
     } catch (error) {
         console.error('Error calling the API:', error);
+        throw error;
     }
 }
 
@@ -158,12 +176,31 @@ export async function writeArticle(casts: string) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        console.log(data); // Process the response data as needed
+        const data = response.body as ReadableStream<Uint8Array>;
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let content = '';
+
+        while (true) {
+            try {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                content += decoder.decode(value, { stream: true })
+
+            } catch (readError) {
+                console.error('Error reading data stream:', readError);
+                throw readError;
+            }
+        }
+
+        // const data = await response.json();
+        console.log(content); // Process the response data as needed
         // If your response is a stream, handle accordingly
-        return data;
+        return content;
     } catch (error) {
         console.error('Error calling the API:', error);
+        throw error;
     }
 }
 
@@ -205,31 +242,33 @@ export async function callChatAPI(casts: string) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // const data = response.body as ReadableStream<Uint8Array>;
-        // const reader = data.getReader();
-        // const decoder = new TextDecoder();
-        // let content = '';
+        const data = response.body as ReadableStream<Uint8Array>;
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let content = '';
 
-        // while (true) {
-        //     try {
-        //         const { value, done } = await reader.read();
-        //         if (done) break;
+        while (true) {
+            try {
+                const { value, done } = await reader.read();
+                if (done) break;
 
-        //         content += decoder.decode(value, { stream: true })
+                content += decoder.decode(value, { stream: true })
 
-        //     } catch (readError) {
-        //         console.error('Error reading data stream:', readError);
-        //     }
-        // }
+            } catch (readError) {
+                console.error('Error reading data stream:', readError);
+            }
+        }
 
-        // return content
 
-        const data = await response.json();
-        console.log(data); // Process the response data as needed
+        // const data = await response.json();
+        console.log(content); // Process the response data as needed
         // If your response is a stream, handle accordingly
-        return data;
+        return content
+
+        // return data;
     } catch (error) {
         console.error('Error calling the API:', error);
+        throw error;
     }
 }
 

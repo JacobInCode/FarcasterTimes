@@ -1,8 +1,10 @@
 // import { getServerSession } from "next-auth"
 import * as z from "zod"
+import { createClient } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
+import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai-edge';
 import { createBrowserClient } from "@supabase/ssr";
-export const maxDuration = 300; // This function can run for a maximum of 300 seconds
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge'
@@ -41,8 +43,6 @@ export async function POST(
 
         const { model, max_tokens, messages, temperature, top_p, frequency_penalty, presence_penalty } = schema.parse(json);
 
-        console.log("model", model, "max_tokens", max_tokens, "messages", messages, "temperature", temperature, "top_p", top_p, "frequency_penalty", frequency_penalty, "presence_penalty", presence_penalty)
-        
         const chatMessages: ChatCompletionRequestMessage[] = messages.map((message: any) => {
             return {
                 role: message.role as ChatCompletionRequestMessageRoleEnum,
@@ -52,7 +52,7 @@ export async function POST(
 
         const response = await openai.createChatCompletion({
             model,
-            stream: false,
+            stream: true,
             max_tokens,
             messages: chatMessages,
             temperature, 
@@ -61,11 +61,10 @@ export async function POST(
             presence_penalty,
         })
 
-        const res = await response.json()
-        console.log("response", res)
+        const stream = OpenAIStream(response);
 
         // return stream response (SSE)
-        return new Response(JSON.stringify(res.choices[0].message.content), { status: 200 });
+        return new StreamingTextResponse(stream);
 
     } catch (error) {
         console.log("Error in ai chat route:", error)
