@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { inter } from "@/app/fonts";
-import { cn } from "@/lib/utils";
+import { cn, removeMarkdownLinks } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -87,8 +87,8 @@ const CitizenCard: React.FC = () => {
                 channel_id: channelId,
             };
 
-            const image = await generateImage(`Create an image to represent this newspaper headline : ${finalArticleObject.headline}`);
-            const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${finalArticleObject.body}`);
+            const image = await generateImage(`Create an vibrant image to describe this headline: ${finalArticleObject.headline}`);
+            const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${removeMarkdownLinks(finalArticleObject.body)}`);
 
             const finalArticleObjectWithImage = {
                 ...finalArticleObject,

@@ -46,22 +46,22 @@ export default async function Index({ params }: { params: { id: string } }) {
 
   console.log("priceOfEthereum", priceOfEthereum);
   try {
-    const { data: lastGeneration, error: generationError } = await supabaseAdmin
-      .from('generations')
-      .select('*')
-      .eq('channel_id', channelId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single();
+    // const { data: lastGeneration, error: generationError } = await supabaseAdmin
+    //   .from('generations')
+    //   .select('*')
+    //   .eq('channel_id', channelId)
+    //   .order('created_at', { ascending: false })
+    //   .limit(1)
+    //   .single();
 
 
-    console.log("lastGeneration", lastGeneration);
+    // console.log("lastGeneration", lastGeneration);
 
-    if (generationError) {
-      console.error(generationError);
-    }
+    // if (generationError) {
+    //   console.error(generationError);
+    // }
 
-    if (!shouldGenerate(lastGeneration)) {
+    // if (!shouldGenerate(lastGeneration)) {
       const { data: latestArticles, error: articlesError } = await supabaseAdmin
         .from('articles')
         .select('*')
@@ -74,7 +74,7 @@ export default async function Index({ params }: { params: { id: string } }) {
       }
 
       articles = latestArticles;
-    }
+    // }
   } catch (error) {
     console.error(error);
   }
