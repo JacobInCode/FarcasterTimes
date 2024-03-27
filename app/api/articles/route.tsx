@@ -15,7 +15,6 @@ const articleSchema = z.object({
 });
 
 export async function POST(request: Request) {
-    const cookieStore = cookies()
     const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
 
     try {

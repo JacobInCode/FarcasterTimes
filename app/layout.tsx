@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css";
 import TitleLogo from '@/components/TitleLogo';
+import { TailwindIndicator } from '@/components/TailwindIndicator';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://falfj.com`
@@ -11,7 +12,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Fully Automated Laissez-Faire Journalism",
+  title: "Citizen Times",
   description: "Automated news generation for internet natives",
   openGraph: {
     images: ['https://falfj.com/opengraph-image.png'],
@@ -33,6 +34,7 @@ export default function RootLayout({
       <body className="bg-background text-foreground px-4">
         <main className="min-h-screen flex flex-col items-center">
           {children}
+          <TailwindIndicator />
           <Analytics />
         </main>
       </body>

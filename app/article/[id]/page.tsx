@@ -8,7 +8,8 @@ import ArticlePage from "@/components/ArticlePage";
 import TitleLogo from "@/components/TitleLogo";
 import Link from "next/link";
 import type { Metadata, ResolvingMetadata } from 'next'
- 
+import MinimalHeader from "@/components/MinimalHeader";
+
 type Props = {
   params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
@@ -20,7 +21,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Fully Automated Laissez-Faire Journalism",
+  title: "Citizen Times",
   description: "Automated news generation for internet natives",
   openGraph: {
     images: ['https://falfj.com/opengraph-image.png'],
@@ -29,7 +30,7 @@ const metadata = {
   },
   // image: new URL("/opengraph-image.png", defaultUrl),
 };
- 
+
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
@@ -38,21 +39,21 @@ export async function generateMetadata(
   const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
 
   const { data: articleData, error: articlesError } = await supabaseAdmin
-  .from('articles')
-  .select('*')
-  .eq('id', params.id || '')
-  .single()
- 
+    .from('articles')
+    .select('*')
+    .eq('id', params.id || '')
+    .single()
+
   // fetch data
   // const product = await fetch(`https://.../${id}`).then((res) => res.json())
- 
+
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || []
 
   if (articlesError) {
     return metadata;
   }
- 
+
   return {
     title: articleData.headline,
     openGraph: {
@@ -79,12 +80,7 @@ export default async function Index({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex-1 w-full flex flex-col gap-7 items-center mb-32 max-w-6xl">
-      <div className='w-full flex flex-col items-center justify-center bg-background'>
-        <Link href="/" className='py-1 flex justify-center relative w-80 sm:w-96'>
-          <TitleLogo className="" />
-        </Link>
-        <div className="border-b w-full" />
-      </div>
+      <MinimalHeader />
       <ArticlePage article={article} />
     </div>
   );

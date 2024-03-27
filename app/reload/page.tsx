@@ -8,9 +8,9 @@ import {
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { callChatAPI, fetchBulkCasts, fetchFeed, formatArticleWithAuthorLinks, generateImage, parseArticleToJSON, submitArticle, writeArticle } from '@/lib/utils/fetch';
-import { FilterType } from '@neynar/nodejs-sdk';
+import { callChatAPI, fetchBulkCasts, fetchFeed, generateImage, parseArticleToJSON, submitArticle, writeArticle } from '@/lib/utils/fetch';
 import { CastsResponse, FeedResponse } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { formatArticleWithAuthorLinks } from '@/lib/utils/helpers';
 
 const Reload: React.FC = () => {
 

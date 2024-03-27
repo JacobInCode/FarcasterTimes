@@ -1,6 +1,8 @@
 import { Article } from "@/types";
 import { CastsResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { createBrowserClient } from "@supabase/ssr";
+import { symbols } from "./config";
 
 export async function generateSpeech(input: string): Promise<any> {
     try {
@@ -93,29 +95,21 @@ export function parseArticleToJSON(articleText: string): Article {
     return { headline, body };
 }
 
-export function formatArticleWithAuthorLinks(article: string): string {
-    const authorRegex = /\(AUTHOR: ([^\)]+)\)/g;
-
-    return article.replace(authorRegex, (match, username) => {
-        return `[${match.replace('(AUTHOR: ', '').replace(')', '')}](https://warpcast.com/${username})`;
-    });
-}
-
 export async function describeImage(image_url: string) {
-    
+
     const requestBody = {
         "model": "gpt-4-vision-preview",
         "messages": [
             {
                 role: "user",
                 content: [
-                  { type: "text", text: "What’s in this image?" },
-                  {
-                    type: "image_url",
-                    image_url
-                  },
+                    { type: "text", text: "What’s in this image?" },
+                    {
+                        type: "image_url",
+                        image_url
+                    },
                 ],
-              },
+            },
         ],
         "temperature": 0.4,
         "max_tokens": 4095,
@@ -306,7 +300,7 @@ export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any
                 'Content-Type': 'application/json',
                 // Include any other necessary headers, such as authorization tokens
             },
-            body: JSON.stringify({urls}),
+            body: JSON.stringify({ urls }),
         });
 
         if (!response.ok) {
@@ -332,7 +326,7 @@ export async function fetchBulkCasts(hashes: string[][]): Promise<any> {
                 'Content-Type': 'application/json',
                 // Include any other necessary headers, such as authorization tokens
             },
-            body: JSON.stringify({hashes}),
+            body: JSON.stringify({ hashes }),
         });
 
         if (!response.ok) {
@@ -356,7 +350,7 @@ export async function fetchFeed(channelId: string): Promise<any> {
                 'Content-Type': 'application/json',
                 // Include any other necessary headers, such as authorization tokens
             },
-            body: JSON.stringify({channelId}),
+            body: JSON.stringify({ channelId }),
         });
 
         if (!response.ok) {
@@ -372,40 +366,54 @@ export async function fetchFeed(channelId: string): Promise<any> {
     }
 }
 
-// export const fetchAI = async () => {
+export async function initialFetch(channel_id: string) {
 
-//     try {
+    const fetchPrice = async (symbol: string) => {
+        const response = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}`, {
+            method: 'GET',
+            // @ts-ignore
+            headers: {
+                'X-CMC_PRO_API_KEY': process.env.COIN_MARKET_CAP_API_KEY,
+                'Accept': 'application/json'
+            }
+        });
 
-//         const response = await fetch(`/api/ai`, {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify(body),
-//         });
+        const res = await response.json();
+        return res.data[symbol].quote.USD.price;
+    };
 
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
+    const fetchPrices = async (symbols: string[]) => {
+        const pricePromises = symbols.map(fetchPrice);
+        const prices = await Promise.all(pricePromises);
+        return prices.map(price => price.toLocaleString(undefined, { maximumFractionDigits: 2 }));
+    };
 
-//         const data = response.body as ReadableStream<Uint8Array>;
-//         const reader = data.getReader();
-//         const decoder = new TextDecoder();
-//         let content = '';
+    const prices = await fetchPrices(symbols);
 
-//         while (true) {
-//             try {
-//                 const { value, done } = await reader.read();
-//                 if (done) break;
+    const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '');
+    let articles = null;
 
-//                 content += decoder.decode(value, { stream: true })
+    let query = supabaseAdmin
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(37); 
 
-//             } catch (readError) {
-//                 console.error('Error reading data stream:', readError);
-//             }
-//         }
+    if (channel_id !== 'all') {
+        query = query.eq('channel_id', channel_id);
+    }
 
-//         return content
-//     } catch (error) {
-//         console.error('Error during data streaming:', error);
-//         return null;
-//     }
-// };
+    try {
+        const { data: latestArticles, error: articlesError } = await query
+
+        if (articlesError) {
+            console.error(articlesError);
+        }
+
+        articles = latestArticles;
+    } catch (error) {
+        console.error(error);
+    }
+
+    return { prices, articles };
+}
