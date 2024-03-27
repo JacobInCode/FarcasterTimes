@@ -366,6 +366,29 @@ export async function fetchFeed(channelId: string): Promise<any> {
     }
 }
 
+export async function fetchArticle(id: string): Promise<any> {
+    try {
+        const response = await fetch('/api/article', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        console.log(data); // Process the response data as needed
+        return data;
+    } catch (error) {
+        console.error('Error fetching article:', error);
+        throw error;
+    }
+}
+
 export async function initialFetch(channel_id: string) {
 
     const fetchPrice = async (symbol: string) => {

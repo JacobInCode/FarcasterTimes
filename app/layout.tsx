@@ -7,7 +7,7 @@ import TitleLogo from '@/components/TitleLogo';
 import { TailwindIndicator } from '@/components/TailwindIndicator';
 
 const defaultUrl = process.env.VERCEL_URL
-  ? `https://falfj.com`
+  ? `https://citizentimes.xyz`
   : "http://localhost:3000";
 
 export const metadata = {
@@ -15,7 +15,7 @@ export const metadata = {
   title: "Citizen Times",
   description: "Automated news generation for internet natives",
   openGraph: {
-    images: ['https://falfj.com/opengraph-image.png'],
+    images: ['https://citizentimes.xyz/opengraph-image.png'],
     width: 1200,
     height: 600,
   },

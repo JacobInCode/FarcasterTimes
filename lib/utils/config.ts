@@ -13,3 +13,5 @@ export const channels = [
 ];
 
 export const symbols = ['ETH', 'BTC', 'SOL'];
+
+export const SUPABASE_IMAGE_URL = 'https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos'

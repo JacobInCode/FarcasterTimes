@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { inter } from '@/app/fonts';
 import { cn } from '@/lib/utils';
 import { Article } from '@/types';
+import { SUPABASE_IMAGE_URL } from '@/lib/utils/config';
 
 function sliceAtNextSpace(str: string, limit: number) {
     if (str.length <= limit) return str;
@@ -99,7 +100,7 @@ const ArticleComponentGrid: React.FC<ArticleComponentProps> = ({ article, idx, i
             <div className={cn('flex-col flex space-y-4 my-0')}>
                 <Link href={`/article/${article.id}`} className='no-underline'>
                     {<div className={cn('h-[200px] w-[200px] my-0 overflow-hidden relative z-0 bg-gray-100')}>
-                        <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
+                        <Image src={`${SUPABASE_IMAGE_URL}/${article.image}`}
                             // placeholder="blur"
                             layout='fill'
                             objectFit='cover'
@@ -127,7 +128,7 @@ const ArticleComponentSmall: React.FC<ArticleComponentProps> = ({ article, idx, 
                 <Link href={`/article/${article.id}`} className='no-underline'>
 
                     {<div className={cn('h-[180px] sm:h-[260px] md:h-[300px] lg:h-[260px] my-0 overflow-hidden relative z-0 bg-gray-100', { "lg:hidden": idx === 1 })}>
-                        <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
+                        <Image src={`${SUPABASE_IMAGE_URL}/${article.image}`}
                             // placeholder="blur"
                             layout='fill'
                             objectFit='cover'
@@ -176,7 +177,7 @@ const ArticleComponent: React.FC<ArticleComponentProps> = ({ article, idx, isLas
                 </div>
                 <Link href={`/article/${article.id}`} className='no-underline'>
                     <div className='shrink-0 md:w-[470px] md:h-[320px] my-0 overflow-hidden relative z-0 bg-gray-100'>
-                        <Image src={`https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos/${article.image}`}
+                        <Image src={`${SUPABASE_IMAGE_URL}/${article.image}`}
                             layout='fill'
                             objectFit='cover'
                             // placeholder="blur"
