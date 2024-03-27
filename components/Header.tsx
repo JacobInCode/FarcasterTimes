@@ -35,14 +35,14 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
         </div>
       </div>
       <div className='px-8 sm:px-32 py-3 lg:p-5 w-full flex justify-center border-b border-gray-200 relative'>
-        <div className={"hidden sm:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0"}>
+        <div className={"hidden md:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0"}>
           <div className={cn(inter.className, 'text-xs font-bold')}>{format(new Date(), 'EEEE, MMMM d')}</div>
           <div className={cn(inter.className, 'text-xs')}>Today's Date</div>
         </div>
         <Link href="/" className='cursor-pointer'>
           <TitleLogo className="w-36 md:w-60" />
         </Link>
-        <div className={"hidden sm:inline absolute right-0 flex flex-col pt-3 items-end space-y-0.5 pl-3 md:px-0"}>
+        <div className={"hidden md:inline absolute right-0 flex flex-col pt-3 items-end space-y-0.5 pl-3 md:px-0"}>
           <PriceFeed prices={prices} />
         </div>
       </div>

@@ -14,18 +14,18 @@ import { cn, removeMarkdownLinks } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, parseArticleToJSON, submitArticle, writeArticle } from "@/lib/utils/fetch";
+import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, submitArticles, writeArticle } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
 import { Expand, ExpandIcon, Loader2Icon, Minimize, MinusCircle, PlusIcon, X } from "lucide-react";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import { formatArticleWithAuthorLinks } from "@/lib/utils/helpers";
+import { formatArticleWithAuthorLinks, parseArticleToJSON } from "@/lib/utils/helpers";
 
 const CitizenCard: React.FC = () => {
 
     const router = useRouter();
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
-    const [urls, setUrls] = React.useState<(string | undefined)[]>([undefined, undefined, undefined]);
+    const [urls, setUrls] = React.useState<(string | undefined)[]>([undefined]);
 
     const addUrl = () => {
         if (urls.length < 10) {
@@ -96,7 +96,7 @@ const CitizenCard: React.FC = () => {
                 audio: audio.speechUrl
             };
 
-            const { data } = await submitArticle([finalArticleObjectWithImage])
+            const { data } = await submitArticles([finalArticleObjectWithImage])
 
             // console.log("PARSEDARTICLES", data);
             router.push(`/article/${data[0].id}`);

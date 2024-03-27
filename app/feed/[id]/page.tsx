@@ -13,7 +13,7 @@ export default async function Index({ params }: { params: { id: string } }) {
   return (
     <div className="flex-1 w-full flex flex-col gap-7 items-center mb-16 relative max-w-6xl">
       <Header prices={prices} channelId={channelId} />
-      <ArticlesFeed articles={articles} channelId={channelId} />
+      <ArticlesFeed articles={articles} />
       <Footer />
     </div>
   );

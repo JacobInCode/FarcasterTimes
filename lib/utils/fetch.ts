@@ -52,7 +52,7 @@ export async function generateImage(prompt: string): Promise<any> {
     }
 }
 
-export async function submitArticle(articles: Article[]) {
+export async function submitArticles(articles: Article[]) {
     try {
         const response = await fetch('/api/articles', {
             method: 'POST',
@@ -79,20 +79,6 @@ export async function submitArticle(articles: Article[]) {
         console.error('Failed to submit article:', error);
         return { error: true, data: error };
     }
-}
-
-
-export function parseArticleToJSON(articleText: string): Article {
-    // Split the text by "Article:" to separate the headline and article.
-    const [headlinePart, articlePart] = articleText.split("\n\nArticle:\n\n");
-
-    // Remove the "Headline:" prefix and trim any leading/trailing whitespace.
-    const headline = headlinePart.replace("Headline: ", "").trim();
-
-    // Trim the article part to remove any leading/trailing whitespace.
-    const body = articlePart.trim();
-
-    return { headline, body };
 }
 
 export async function describeImage(image_url: string) {

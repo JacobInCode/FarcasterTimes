@@ -8,9 +8,10 @@ import {
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { callChatAPI, fetchBulkCasts, fetchFeed, generateImage, parseArticleToJSON, submitArticle, writeArticle } from '@/lib/utils/fetch';
-import { CastsResponse, FeedResponse } from '@neynar/nodejs-sdk/build/neynar-api/v2';
-import { formatArticleWithAuthorLinks } from '@/lib/utils/helpers';
+import { callChatAPI, describeImage, fetchBulkCasts, fetchFeed, generateImage, submitArticles, writeArticle } from '@/lib/utils/fetch';
+import { CastsResponse } from '@neynar/nodejs-sdk/build/neynar-api/v2';
+import { formatArticleWithAuthorLinks, parseArticleToJSON, parseJSONStringHashes } from '@/lib/utils/helpers';
+import { channels } from '@/lib/utils/config';
 
 const Reload: React.FC = () => {
 
@@ -21,39 +22,16 @@ const Reload: React.FC = () => {
         try {
             setLoading(true);
             setLoadingChannelId(channelId);
-            console.log("HERE", channelId);
-            // 1. Get all casts for channel for last 24 hours
-            // let feedRes;
-            // if (channelId === 'trending') {
-            //     feedRes = await client.fetchFeed('filter', {
-            //         filterType: FilterType.GlobalTrending,
-            //         // channelId,
-            //         withRecasts: true,
-            //         withReplies: true,
-            //         limit: 100
-            //     });
-            // } else {
-            //     feedRes = await client.fetchFeed('filter', {
-            //         filterType: FilterType.ChannelId,
-            //         channelId,
-            //         withRecasts: true,
-            //         withReplies: true,
-            //         limit: 100
-            //     });
-            // }
 
-            const feedRes: FeedResponse = await fetchFeed(channelId);
+            // GET RELEVANT CASTS
+            const feedRes: any[] = await fetchFeed(channelId);
 
-            console.log("HERE", feedRes);
-
-            const mappedCasts = feedRes.casts
-                .filter((cast) => {
+            const fetchedRelevantCasts = feedRes.filter((cast) => {
                     const castTimestamp = new Date(cast.timestamp);
                     const last24Hours = new Date();
                     last24Hours.setDate(last24Hours.getDate() - 10);
                     return castTimestamp > last24Hours;
-                })
-                .map((cast) => {
+                }).map((cast) => {
                     return {
                         cast_hash: cast.hash,
                         text: cast.text,
@@ -61,46 +39,57 @@ const Reload: React.FC = () => {
                     };
                 });
 
-            const filteredCasts = mappedCasts.filter((cast) => cast.likes > 10);
+            const castsWithOverTenLikes = fetchedRelevantCasts.filter((cast) => cast.likes > 10);
 
-            console.log(filteredCasts);
+            const relevantCasts = JSON.stringify(castsWithOverTenLikes);
 
-            const casts = JSON.stringify(filteredCasts);
+            // Organize cast hashes by topic
+            let topicallySortedCastHashes = await callChatAPI(relevantCasts);
 
-            // 2. Organize cast hashes by topic
-            let topicOrganizedHashes = await callChatAPI(casts);
+            // FETCH BULK CASTS
+            const casts: CastsResponse[] = await fetchBulkCasts(parseJSONStringHashes(topicallySortedCastHashes));
 
-            if (topicOrganizedHashes.includes('```json')) {
-                topicOrganizedHashes = topicOrganizedHashes.replace(/\`\`\`json\n|\`\`\`/g, '').trim()
-                if (!!topicOrganizedHashes.match(/\[(.|\s)*?\]/)?.[0]) {
-                    topicOrganizedHashes = topicOrganizedHashes.match(/\[(.|\s)*?\]/)?.[0]!;
+            // FORMATTING
+            const mappedCasts = casts.map((res) => res.result.casts.map((cast: any) => { return { cast: cast, text: cast.text, author_unique_username: cast.author.username, author_display_name: cast.author.display_name, author_id: cast.author.fid, cast_id: cast.hash } }))
+
+            // ADD IMAGE DESCRIPTIONS TO ANY CASTS WITH IMAGES OR FRAMES
+
+            // @ts-ignore
+            const imageDescriptions = await Promise.all(mappedCasts.map(c => c.cast).map((cast: any) => {
+
+                if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
+                    return describeImage(cast.embeds[0].url)
+                } else if (cast?.embeds[1]?.url && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
+                    return describeImage(cast.embeds[1].url)
+                } else if (cast?.frames?.[0]?.image) {
+                    return describeImage(cast.frames[0].image)
+                } else {
+                    return Promise.resolve(null)
                 }
-            }
 
-            let parsedHashes = JSON.parse(topicOrganizedHashes);
+            }));
 
-            // 3. For each topic
+            const castsWithImageDescs = mappedCasts.map((cast: any, index: number) => {
+                return { ...cast, text: `CAST TEXT: ${cast.text} ${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
+            })
 
-            const castsRes: CastsResponse[] = await fetchBulkCasts(parsedHashes);
+            // WRITE ARTICLES
+            const writtenArticles = await Promise.all(mappedCasts.map((casts: any[]) => writeArticle(JSON.stringify(castsWithImageDescs))));
 
-            const mappedAndFilteredCasts = castsRes.map((res) => res.result.casts.map((cast: any) => { return { text: cast.text, author_unique_username: cast.author.username, author_display_name: cast.author.display_name, author_id: cast.author.fid, cast_id: cast.hash } }))
+            // FORMATTING
+            const addedLinks = writtenArticles.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
 
-            const articlesRes = await Promise.all(mappedAndFilteredCasts.map((casts: any[]) => writeArticle(JSON.stringify(casts))));
-
-            console.log(articlesRes);
-
-            const addedLinks = articlesRes.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
-
-            const parsedArticles = addedLinks.map((article: string) => parseArticleToJSON(article));
-            const finalArticleObject = parsedArticles.map((article: any, index: number) => {
+            const finalArticles = addedLinks.map((article: string) => parseArticleToJSON(article)).map((article: any, index: number) => {
                 return {
                     ...article,
-                    sources: mappedAndFilteredCasts[index].map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
+                    sources: mappedCasts[index].map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
                     channel_id: channelId,
                 };
             });
 
-            const finalArticleObjectWithImages = await Promise.all(finalArticleObject.map(async (article: any) => {
+
+            // GENERATE IMAGES
+            const finalArticlesWithImages = await Promise.all(finalArticles.map(async (article: any) => {
                 const image = await generateImage(`Create an image to represent this newspaper headline : ${article.headline}`);
                 return {
                     ...article,
@@ -108,11 +97,9 @@ const Reload: React.FC = () => {
                 };
             }))
 
-            console.log("PARSEDARTICLES", finalArticleObjectWithImages);
-            // setArticles(finalArticleObject);
+            // SAVING
+            await submitArticles(finalArticlesWithImages)
 
-            await submitArticle(finalArticleObjectWithImages)
-            
         } catch (error) {
             console.error('Error fetching articles:', error);
         } finally {
@@ -124,15 +111,19 @@ const Reload: React.FC = () => {
     return (
         <div className='mt-20 w-full flex items-center justify-center'>
             <Card className={cn("bg-gray-100 border-gray-200 max-w-2xl p-5 rounded-sm")}>
-                {/* <CardHeader className="w-[300px] p-0 space-y-3">
-                    <CardTitle>Citizen Journalism</CardTitle>
-                    <CardDescription>The collection, dissemination, and analysis of news and information by the general public, especially by means of the internet.</CardDescription>
-                </CardHeader> */}
                 <CardContent className="space-y-2 p-0 max-w-96">
-                    {/* <CardDescription className="font-medium">Use the open social graph of Farcaster to power your own journalism.</CardDescription> */}
-                    <Button disabled={loading} variant={"secondary"} className="h-8 bg-black text-white w-full" onClick={() => fetchData("trending")}>{(loading && loadingChannelId === "trending") && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} Reload Trending</Button>
-                    <Button disabled={loading} variant={"secondary"} className="h-8 bg-black text-white w-full" onClick={() => fetchData("ethereum")}>{(loading && loadingChannelId === "ethereum") && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} Reload Ethereum</Button>
-                    <Button disabled={loading} variant={"secondary"} className="h-8 bg-black text-white w-full" onClick={() => fetchData("farcaster")}>{(loading && loadingChannelId === "farcaster") && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} Reload Farcaster</Button>
+                    {channels.map((channel) => (
+                        <Button
+                            key={channel.id}
+                            disabled={loading}
+                            variant={"secondary"}
+                            className="h-8 bg-black text-white w-full"
+                            onClick={() => fetchData(channel.id)}
+                        >
+                            {(loading && loadingChannelId === channel.id) && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
+                            Reload {channel.label}
+                        </Button>
+                    ))}
                 </CardContent>
             </Card>
         </div>
