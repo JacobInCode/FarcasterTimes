@@ -31,6 +31,7 @@ export async function POST(
 
         const channelIds = channels.find(c => c.id === channelId)?.sources;
 
+        console.log("channelIds", channelIds)
         if (!channelIds) {
             throw new Error('Channel not found');
         }
@@ -45,6 +46,8 @@ export async function POST(
             });
             return feedRes;
         });
+
+        console.log("fetchFeedPromises", fetchFeedPromises)
 
         const feedResponses = await Promise.all(fetchFeedPromises);
         feedRes = feedResponses.map(f => f.casts).flat();

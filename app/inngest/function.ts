@@ -28,7 +28,7 @@ export const generateChannelArticle = inngest.createFunction(
 
             const castsWithOverTenLikes = fetchedRelevantCasts.filter((cast) => cast.likes > 10);
 
-            console.log("CASTS WITH OVER TEN LIKES", castsWithOverTenLikes);
+            // console.log("CASTS WITH OVER TEN LIKES", castsWithOverTenLikes);
             return castsWithOverTenLikes;
         });
 
