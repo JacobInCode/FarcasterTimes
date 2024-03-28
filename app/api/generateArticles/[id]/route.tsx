@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { inngest } from "@/app/inngest/client"; // Import our client
-import { channels } from "@/lib/utils/config";
 
 // Opt out of caching; every request should send a new event
 export const dynamic = "force-dynamic";
