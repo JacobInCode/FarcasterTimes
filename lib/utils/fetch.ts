@@ -7,7 +7,7 @@ import { formatArticleWithAuthorLinks, parseArticleToJSON, parseJSONStringHashes
 
 export async function generateSpeech(input: string): Promise<any> {
     try {
-        const response = await fetch(`${defaultUrl}/api/audio`, { // Replace `${defaultUrl}/api/your-endpoint' with the actual endpoint path
+        const response = await fetch(`${defaultUrl}api/audio`, { // Replace `${defaultUrl}api/your-endpoint' with the actual endpoint path
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export async function generateSpeech(input: string): Promise<any> {
 
 export async function generateImage(prompt: string): Promise<any> {
     try {
-        const response = await fetch(`${defaultUrl}/api/image`, { // Replace `${defaultUrl}/api/your-endpoint' with the actual endpoint path
+        const response = await fetch(`${defaultUrl}api/image`, { // Replace `${defaultUrl}api/your-endpoint' with the actual endpoint path
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export async function generateImage(prompt: string): Promise<any> {
 
 export async function submitArticles(articles: Article[]) {
     try {
-        const response = await fetch(`${defaultUrl}/api/articles`, {
+        const response = await fetch(`${defaultUrl}api/articles`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any
 export async function fetchBulkCasts(hashes: string[][]): Promise<any> {
     try {
 
-        const response = await fetch(`${defaultUrl}/api/fetchBulkCasts`, {
+        const response = await fetch(`${defaultUrl}api/fetchBulkCasts`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export async function fetchBulkCasts(hashes: string[][]): Promise<any> {
 export async function fetchFeed(channelId: string): Promise<any> {
     try {
 
-        const response = await fetch(`${defaultUrl}/api/fetchFeed`, {
+        const response = await fetch(`${defaultUrl}api/fetchFeed`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ export async function fetchFeed(channelId: string): Promise<any> {
 
 export async function fetchArticle(id: string): Promise<any> {
     try {
-        const response = await fetch(`${defaultUrl}/api/article`, {
+        const response = await fetch(`${defaultUrl}api/article`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -265,7 +265,7 @@ export async function describeImage(image_url: string) {
     };
 
     try {
-        const response = await fetch(`${defaultUrl}/api/generate`, { // Use the correct endpoint
+        const response = await fetch(`${defaultUrl}api/generate`, { // Use the correct endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -325,7 +325,7 @@ export async function writeArticle(casts: string) {
     };
 
     try {
-        const response = await fetch(`${defaultUrl}/api/generate`, { // Use the correct endpoint
+        const response = await fetch(`${defaultUrl}api/generate`, { // Use the correct endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -391,7 +391,7 @@ export async function organizeHashesByTopic(casts: string) {
     };
 
     try {
-        const response = await fetch(`${defaultUrl}/api/generate`, { // Use the correct endpoint
+        const response = await fetch(`${defaultUrl}api/generate`, { // Use the correct endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -452,7 +452,7 @@ export async function chooseChannelId(channelIds: string, article: string) {
     };
 
     try {
-        const response = await fetch(`${defaultUrl}/api/generate`, { // Use the correct endpoint
+        const response = await fetch(`${defaultUrl}api/generate`, { // Use the correct endpoint
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
