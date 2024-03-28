@@ -15,23 +15,17 @@ export async function POST(
     req: Request,
 ) {
     try {
-        console.log('req:', req);
         const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
         const client = new NeynarAPIClient(process.env.NEYNAR_API_KEY || '');
 
         if (!supabaseAdmin) {
             throw new Error('Not authenticated')
         }
-        console.log('supabaseAdmin:', supabaseAdmin);
         // Validate route params.
 
         const json = await req.json();
 
-        console.log('json:', json);
-
         const { channelId } = schema.parse(json);
-
-        console.log('channelId:', channelId);
 
         let feedRes;
 
