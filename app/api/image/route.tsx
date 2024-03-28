@@ -1,16 +1,17 @@
 // import { getServerSession } from "next-auth"
 import * as z from "zod"
-import { createClient } from '@/utils/supabase/server'
-import { cookies } from 'next/headers'
+// import { createClient } from '@/utils/supabase/server'
+// import { cookies } from 'next/headers'
 import OpenAI from "openai";
 import { createBrowserClient } from "@supabase/ssr";
 import { decode } from 'base64-arraybuffer'
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 export const maxDuration = 300; // This function can run for a maximum of 300 seconds
+export const dynamic = "force-dynamic";
 
 // IMPORTANT! Set the runtime to edge
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 const schema = z.object({
     prompt: z.string(),

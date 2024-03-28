@@ -95,10 +95,10 @@ export async function POST(
         })
 
         const stream = OpenAIStream(response);
-        const streamWithInitialMessage = withInitialMessage(stream);
+        // const streamWithInitialMessage = withInitialMessage(stream);
 
         // return stream response (SSE)
-        return new StreamingTextResponse(streamWithInitialMessage);
+        return new StreamingTextResponse(stream);
 
     } catch (error) {
         console.log("Error in ai chat route:", error)

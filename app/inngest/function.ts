@@ -81,7 +81,7 @@ export const generateChannelArticle = inngest.createFunction(
                 return {
                     ...article,
                     sources: topicallyOrganizedCasts[index].map((cast: any) => { 
-                        console.log("CAST", cast)
+                        // console.log("CAST", cast)
                         return { hash: cast.hash, username: cast.author.username, fid: cast.author.fid } 
                     }),
                     channel_id: channelId,
