@@ -13,7 +13,7 @@ export const generateChannelArticle = inngest.createFunction(
         const channelCasts = await step.run("fetch-feed", async () => {
             const feedRes: any[] = await fetchFeed(channelId);
 
-            console.log("FEED RES", feedRes)
+            // console.log("FEED RES", feedRes)
 
             const fetchedRelevantCasts = feedRes.filter((cast) => {
                 const castTimestamp = new Date(cast.timestamp);
@@ -87,6 +87,7 @@ export const generateChannelArticle = inngest.createFunction(
                         return { hash: cast.hash, username: cast.author.username, fid: cast.author.fid, likes, recasts, replies} 
                     }),
                     channel_id: channelId,
+                    citizen: false
                 };
             });
 
@@ -115,7 +116,7 @@ export const generateChannelArticle = inngest.createFunction(
             await submitArticles(articlesWithImages);
         });
 
-        console.log("SAVING ARTICLES");
+        // console.log("SAVING ARTICLES");
 
     },
 );

@@ -26,7 +26,7 @@ export async function POST(
 
         const { hashes: parsedHashes } = schema.parse(json);
 
-        console.log("hashes", parsedHashes)
+        // console.log("hashes", parsedHashes)
 
         const castsRes = await Promise.all(parsedHashes.map((hashes: string[]) => client.fetchBulkCasts(hashes)));
 
@@ -34,7 +34,7 @@ export async function POST(
         return new Response(JSON.stringify(castsRes), { status: 200 });
 
     } catch (error) {
-        console.log("Error in ai chat route:", error)
+        console.log("Error in fetch bulk casts route:", error)
         if (error instanceof z.ZodError) {
             return new Response(JSON.stringify(error.issues), { status: 422 })
         }

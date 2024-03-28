@@ -20,7 +20,6 @@ const ArticlesFeed: React.FC<{ articles: Article[] | null }> = ({ articles: load
                             ))}
                         </div>
                     </div>
-
                 }
             </div>
             {/* Desktop */}

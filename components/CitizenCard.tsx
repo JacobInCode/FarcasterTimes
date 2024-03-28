@@ -85,8 +85,14 @@ const CitizenCard: React.FC = () => {
 
             const finalArticleObject = {
                 ...parsedArticle,
-                sources: mappedCasts.map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
+                sources: mappedCasts.map((cast: any) => { 
+                    const likes = cast?.reactions?.likes?.length || 0;
+                    const recasts = cast?.reactions?.recasts?.length || 0;
+                    const replies = cast?.reactions?.replies?.count || 0;
+                    return { hash: cast.hash, username: cast.author.username, fid: cast.author.fid, likes, recasts, replies} 
+                }),
                 channel_id: channels.find(c => choosenChannelId.toLowerCase().includes(c.id.toLowerCase()))?.id || "",
+                citizen: true
             };
 
             // generate image and speech

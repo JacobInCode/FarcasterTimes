@@ -21,7 +21,7 @@ export async function generateSpeech(input: string): Promise<any> {
         }
 
         const data = await response.json();
-        console.log(data); // Process the response data as needed
+        // console.log(data); // Process the response data as needed
         return data;
     } catch (error) {
         console.error('Error generating audio:', error);
@@ -45,7 +45,7 @@ export async function generateImage(prompt: string): Promise<any> {
         }
 
         const data = await response.json();
-        console.log(data); // Process the response data as needed
+        // console.log(data); // Process the response data as needed
         return data;
     } catch (error) {
         console.error('Error generating image:', error);
@@ -73,7 +73,7 @@ export async function submitArticles(articles: Article[]) {
 
         // Successfully added the article
         const newArticle = await response.json();
-        console.log('Article submitted successfully:', newArticle);
+        // console.log('Article submitted successfully:', newArticle);
         return { error: false, data: JSON.parse(newArticle) };
     } catch (error) {
         // Handle network errors
@@ -85,7 +85,7 @@ export async function submitArticles(articles: Article[]) {
 export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any> {
     try {
 
-        console.log("urls", urls)
+        // console.log("urls", urls)
         const response = await fetch(`${defaultUrl}/api/lookUpCastByHashOrWarpcastUrl`, {
             method: 'POST',
             headers: {
@@ -100,7 +100,7 @@ export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any
         }
 
         const data = await response.json();
-        console.log(data); // Process the response data as needed
+        // console.log(data); // Process the response data as needed
         return data as CastResponse[];
     } catch (error) {
         console.error('Error looking up cast:', error);
@@ -357,7 +357,7 @@ export async function writeArticle(casts: string) {
         }
 
         // const data = await response.json();
-        console.log(content); // Process the response data as needed
+        // console.log(content); // Process the response data as needed
         // If your response is a stream, handle accordingly
         return content.replace("***", "");
     } catch (error) {
@@ -423,7 +423,7 @@ export async function organizeHashesByTopic(casts: string) {
 
 
         // const data = await response.json();
-        console.log(content); // Process the response data as needed
+        // console.log(content); // Process the response data as needed
         // If your response is a stream, handle accordingly
         return content.replace("***", "");
 
