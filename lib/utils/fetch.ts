@@ -298,7 +298,7 @@ export async function describeImage(image_url: string) {
         // const data = await response.json();
         console.log("IMAGE desc ", content); // Process the response data as needed
         // If your response is a stream, handle accordingly
-        return content;
+        return content.replace("***", "");
     } catch (error) {
         console.error('Error calling the API:', error);
         throw error;
@@ -361,7 +361,7 @@ export async function writeArticle(casts: string) {
         // const data = await response.json();
         console.log(content); // Process the response data as needed
         // If your response is a stream, handle accordingly
-        return content;
+        return content.replace("***", "");
     } catch (error) {
         console.error('Error calling the API:', error);
         throw error;
@@ -427,7 +427,7 @@ export async function organizeHashesByTopic(casts: string) {
         // const data = await response.json();
         console.log(content); // Process the response data as needed
         // If your response is a stream, handle accordingly
-        return content
+        return content.replace("***", "");
 
         // return data;
     } catch (error) {
@@ -485,7 +485,7 @@ export async function chooseChannelId(channelIds: string, article: string) {
             }
         }
 
-        return content;
+        return content.replace("***", "");
     } catch (error) {
         console.error('Error calling the API:', error);
         throw error;

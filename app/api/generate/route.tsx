@@ -1,98 +1,110 @@
-import * as z from "zod";
+import * as z from "zod"
+import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai-edge';
 import { createBrowserClient } from "@supabase/ssr";
+// export const maxDuration = 25; // This function can run for a maximum of 300 seconds
+// export const dynamic = 'force-dynamic';
 
-export const runtime = 'edge';
+// Wrap the original stream to prepend an initial blank message
+function withInitialMessage(originalStream: any) {
+    let initialMessageSent = false;
+
+    const wrappedStream = new ReadableStream({
+        start(controller) {
+            // Immediately queue an initial blank message
+            controller.enqueue("***"); // or whatever constitutes a "blank" message in your context
+            initialMessageSent = true;
+
+            // Then, continue reading from the original stream
+            const reader = originalStream.getReader();
+            function push() {
+                // @ts-ignore
+                reader.read().then(({ done, value }) => {
+                    if (done) {
+                        controller.close();
+                        return;
+                    }
+                    controller.enqueue(value);
+                    push();
+                // @ts-ignore
+                }).catch(error => {
+                    console.error('Error reading from original stream', error);
+                    controller.error(error);
+                });
+            }
+            push();
+        }
+    });
+
+    return wrappedStream;
+}
+
+// IMPORTANT! Set the runtime to edge
+export const runtime = 'edge'
 
 const schema = z.object({
-    model: z.string(),
-    max_tokens: z.number(),
-    messages: z.array(z.object({
-        role: z.string(),
-        content: z.any()
-    })),
-    temperature: z.number(),
-    top_p: z.number(),
-    frequency_penalty: z.number(),
-    presence_penalty: z.number(),
+        model: z.string(),
+        max_tokens: z.number(),
+        messages: z.array(z.object({
+            role: z.string(),
+            content: z.any()
+        })),
+        temperature: z.number(),
+        top_p: z.number(),
+        frequency_penalty: z.number(),
+        presence_penalty: z.number()
 });
-
-export async function POST(req: Request) {
+    
+export async function POST(
+    req: Request,
+) {
     try {
-        const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '');
+        const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
+
         if (!supabaseAdmin) {
-            throw new Error('Not authenticated');
+            throw new Error('Not authenticated')
         }
 
         const configuration = new Configuration({
             apiKey: process.env.OPENAI_API_KEY,
         });
+
         const openai = new OpenAIApi(configuration);
 
         const json = await req.json();
+
         const { model, max_tokens, messages, temperature, top_p, frequency_penalty, presence_penalty } = schema.parse(json);
+        const chatMessages: ChatCompletionRequestMessage[] = messages.map((message: any) => {
+            return {
+                role: message.role as ChatCompletionRequestMessageRoleEnum,
+                content: message.content
+            }
+        })
 
-        // Convert messages to the required format for OpenAI API
-        const chatMessages: ChatCompletionRequestMessage[] = messages.map((message: any) => ({
-            role: message.role as ChatCompletionRequestMessageRoleEnum,
-            content: message.content,
-        }));
-
-        const responsePromise = openai.createChatCompletion({
+        const response = await openai.createChatCompletion({
             model,
             stream: true,
             max_tokens,
             messages: chatMessages,
-            temperature,
-            top_p,
-            frequency_penalty,
+            temperature, 
+            top_p, 
+            frequency_penalty, 
             presence_penalty,
-        });
+        })
 
-        let streamStarted = false;
+        const stream = OpenAIStream(response);
+        const streamWithInitialMessage = withInitialMessage(stream);
 
-        const stream = new ReadableStream({
-            start(controller) {
-                const initialTimeout = setTimeout(() => {
-                    if (!streamStarted) {
-                        // Send an initial message if the stream hasn't started
-                        controller.enqueue("Initial data due to delay.");
-                    }
-                }, 5000); // 5 seconds
+        // return stream response (SSE)
+        return new StreamingTextResponse(streamWithInitialMessage);
 
-                responsePromise.then(response => {
-                    streamStarted = true;
-                    clearTimeout(initialTimeout);
-
-                    // Assuming OpenAIStream wraps the response in a way that we can read it as a stream
-                    const reader = response?.body?.getReader();
-                    const push = () => {
-                        reader?.read().then(({ done, value }) => {
-                            if (done) {
-                                controller.close();
-                                return;
-                            }
-                            controller.enqueue(value);
-                            push();
-                        }).catch(error => {
-                            console.error(error);
-                            controller.error(error);
-                        });
-                    };
-                    push();
-                }).catch(error => {
-                    console.error("Error setting up the OpenAI stream:", error);
-                    controller.error(error);
-                });
-            }
-        });
-
-        return new Response(stream, { headers: { 'Content-Type': 'text/plain' } });
     } catch (error) {
-        console.error("Error in AI chat route:", error);
+        console.log("Error in ai chat route:", error)
         if (error instanceof z.ZodError) {
-            return new Response(JSON.stringify(error.issues), { status: 422 });
+            return new Response(JSON.stringify(error.issues), { status: 422 })
         }
-        return new Response(null, { status: 500 });
+        return new Response(null, { status: 500 })
     }
 }
+
+
