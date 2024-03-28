@@ -11,15 +11,12 @@ export function formatArticleWithAuthorLinks(article: string): string {
 export function parseArticleToJSON(articleText: string): Article {
     // Split the text by "Article:" to separate the headline and article.
     const [headlinePart, articlePart] = articleText.split("\n\nARTICLE:\n\n");
-
     // Remove the "Headline:" prefix and trim any leading/trailing whitespace.
-
     const headline = headlinePart.replace("HEADLINE:\n\n", "").trim();
-console.log("HEADLINE", headline)
+    console.log("HEADLINE", headline)
     // Trim the article part to remove any leading/trailing whitespace.
     console.log("ARTICLE", articlePart)
     const body = articlePart.trim();
-
     return { headline, body };
 }
 export const parseJSONStringHashes = (hashes: string): any[] => {
@@ -62,3 +59,11 @@ export function estimateReadingTime(text: string): number {
     // Round up to ensure reading time is at least 1 minute for short texts
     return Math.ceil(readingTimeMinutes);
 }
+
+export function removeMarkdownLinks(inputText: string): string {
+    // Regex to match markdown links. It looks for patterns like [text](URL)
+    const markdownLinkPattern = /\[([^\]]+)\]\([^\)]+\)/g;
+    
+    // Replace markdown links with just the text part
+    return inputText.replace(markdownLinkPattern, '$1');
+  }

@@ -9,11 +9,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { inter } from "@/app/fonts";
-import { cn, removeMarkdownLinks } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, submitArticles, writeArticle, chooseChannelId } from "@/lib/utils/fetch";
+import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, submitArticles, writeArticle, chooseChannelId, generateCitizenArticle } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
 import { Loader2Icon, PlusIcon, X } from "lucide-react";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
@@ -48,64 +48,13 @@ const CitizenCard: React.FC = () => {
 
             const filteredUrls = urls.filter((url) => url !== undefined);
 
-            if (filteredUrls.length === 0) {
+            if (filteredUrls.length === 0 || filteredUrls.includes(undefined)) {
                 setError(true);
                 return;
             }
 
-            // get casts from warpcast urls
-            const castsRes: CastResponse[] = await lookUpCastByHashOrWarpcastUrl(filteredUrls as string[]);
-            const mappedCasts = castsRes.map(c => c.cast).map((cast: any) => cast)
-
-            // add image descriptions to any casts with images or frames
-            const imageDescriptions = await Promise.all(castsRes.map(c => c.cast).map((cast: any) => {
-
-                if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
-                    return describeImage(cast.embeds[0].url)
-                } else if (cast?.embeds[1]?.url && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
-                    return describeImage(cast.embeds[1].url)
-                } else if (cast?.frames?.[0]?.image) {
-                    return describeImage(cast.frames[0].image)
-                } else {
-                    return Promise.resolve(null)
-                }
-
-            }));
-
-            const castsWithImageDescs = mappedCasts.map((cast: any, index: number) => {
-                return { ...cast, text: `CAST TEXT: ${cast.text}${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
-            })
-
-            // write article
-            const articleRes = await writeArticle(JSON.stringify(castsWithImageDescs));
-            const parsedArticle = parseArticleToJSON(formatArticleWithAuthorLinks(articleRes));
-
-            // choose channel id from article text
-            const choosenChannelId = await chooseChannelId(JSON.stringify(channels.map(c => c.id)), `${parsedArticle.headline}\n\n${parsedArticle.body}`);
-
-            const finalArticleObject = {
-                ...parsedArticle,
-                sources: mappedCasts.map((cast: any) => { 
-                    const likes = cast?.reactions?.likes?.length || 0;
-                    const recasts = cast?.reactions?.recasts?.length || 0;
-                    const replies = cast?.reactions?.replies?.count || 0;
-                    return { hash: cast.hash, username: cast.author.username, fid: cast.author.fid, likes, recasts, replies} 
-                }),
-                channel_id: channels.find(c => choosenChannelId.toLowerCase().includes(c.id.toLowerCase()))?.id || "",
-                citizen: true
-            };
-
-            // generate image and speech
-            const image = await generateImage(`Create an vibrant image to describe this headline: ${finalArticleObject.headline}`);
-            const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${removeMarkdownLinks(finalArticleObject.body)}`);
-
-            // save article
-            const { data } = await submitArticles([{
-                ...finalArticleObject,
-                image: image.imageUrl,
-                audio: audio.speechUrl
-            }])
-
+            // @ts-ignore
+            const data = await generateCitizenArticle(filteredUrls);
             // route to article
             router.push(`/article/${data[0].id}`);
 

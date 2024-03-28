@@ -2,8 +2,8 @@ import { Article } from "@/types";
 import { CastsResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { createBrowserClient } from "@supabase/ssr";
-import { defaultUrl, symbols } from "./config";
-import { formatArticleWithAuthorLinks, parseArticleToJSON, parseJSONStringHashes } from "./helpers";
+import { channels, defaultUrl, symbols } from "./config";
+import { formatArticleWithAuthorLinks, parseArticleToJSON, parseJSONStringHashes, removeMarkdownLinks } from "./helpers";
 
 export async function generateSpeech(input: string): Promise<any> {
     try {
@@ -86,7 +86,7 @@ export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any
     try {
 
         // console.log("urls", urls)
-        const response = await fetch(`${defaultUrl}/api/lookUpCastByHashOrWarpcastUrl`, {
+        const response = await fetch(`api/lookUpCastByHashOrWarpcastUrl`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -490,32 +490,15 @@ export async function chooseChannelId(channelIds: string, article: string) {
     }
 };
 
-export const generateArticle = async (channelId: string) => {
+export const generateCitizenArticle = async (filteredUrls: string[]) => {
     try {
 
-        console.log("GENERATING ARTICLE FOR CHANNEL", channelId)
+        // get casts from warpcast urls
+        const castsRes: CastResponse[] = await lookUpCastByHashOrWarpcastUrl(filteredUrls as string[]);
+        const mappedCasts = castsRes.map(c => c.cast).map((cast: any) => cast)
 
-        // GET RELEVANT CASTS
-        const feedRes: any[] = await fetchFeed(channelId);
-
-        console.log("FEED RES", feedRes)
-
-        const fetchedRelevantCasts = feedRes.filter((cast) => {
-                const castTimestamp = new Date(cast.timestamp);
-                const now = new Date();
-                now.setDate(now.getDate() - 1);
-                return castTimestamp > now;
-            }).map((cast) => {
-                return {
-                    ...cast,
-                    likes: cast.reactions.likes.length,
-                };
-            });
-
-        const castsWithOverTenLikes = fetchedRelevantCasts.filter((cast) => cast.likes > 10);
-
-        // ADD IMAGE DESCRIPTIONS
-        const imageDescriptions = await Promise.all(castsWithOverTenLikes.map((cast: any) => {
+        // add image descriptions to any casts with images or frames
+        const imageDescriptions = await Promise.all(castsRes.map(c => c.cast).map((cast: any) => {
 
             if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
                 return describeImage(cast.embeds[0].url)
@@ -529,45 +512,125 @@ export const generateArticle = async (channelId: string) => {
 
         }));
 
-        const castsWithImageDescs = castsWithOverTenLikes.map((cast: any, index: number) => {
-            return { ...cast, text: `CAST TEXT: ${cast.text} ${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
+        const castsWithImageDescs = mappedCasts.map((cast: any, index: number) => {
+            return { ...cast, text: `CAST TEXT: ${cast.text}${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
         })
 
-        console.log("NOW ORGANIZING CASTS BY TOPIC ")
-        // Organize cast hashes by topic
-        let topicallySortedCastHashes = await organizeHashesByTopic(JSON.stringify(castsWithImageDescs));
+        // write article
+        const articleRes = await writeArticle(JSON.stringify(castsWithImageDescs));
+        const parsedArticle = parseArticleToJSON(formatArticleWithAuthorLinks(articleRes));
 
-        let parsedHashes = parseJSONStringHashes(topicallySortedCastHashes);
+        // choose channel id from article text
+        const choosenChannelId = await chooseChannelId(JSON.stringify(channels.map(c => c.id)), `${parsedArticle.headline}\n\n${parsedArticle.body}`);
 
-        const casts = parsedHashes.map((hashes: string[]) => castsWithImageDescs.filter((cast) => hashes.includes(cast.hash)));
+        const finalArticleObject = {
+            ...parsedArticle,
+            sources: mappedCasts.map((cast: any) => { 
+                const likes = cast?.reactions?.likes?.length || 0;
+                const recasts = cast?.reactions?.recasts?.length || 0;
+                const replies = cast?.reactions?.replies?.count || 0;
+                return { hash: cast.hash, username: cast.author.username, fid: cast.author.fid, likes, recasts, replies} 
+            }),
+            channel_id: channels.find(c => choosenChannelId.toLowerCase().includes(c.id.toLowerCase()))?.id || "",
+            citizen: true
+        };
 
-        // WRITE ARTICLES
-        const writtenArticles = await Promise.all(casts.map((casts: any[]) => writeArticle(JSON.stringify(castsWithImageDescs))));
+        // generate image and speech
+        const image = await generateImage(`Create an vibrant image to describe this headline: ${finalArticleObject.headline}`);
+        const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${removeMarkdownLinks(finalArticleObject.body)}`);
 
-        // FORMATTING
-        const addedLinks = writtenArticles.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
+        // save article
+        const { data } = await submitArticles([{
+            ...finalArticleObject,
+            image: image.imageUrl,
+            audio: audio.speechUrl
+        }])
 
-        const finalArticles = addedLinks.map((article: string) => parseArticleToJSON(article)).map((article: any, index: number) => {
-            return {
-                ...article,
-                sources: casts[index].map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
-                channel_id: channelId,
-            };
-        });
-
-        // GENERATE IMAGES
-        const finalArticlesWithImages = await Promise.all(finalArticles.map(async (article: any) => {
-            const image = await generateImage(`Create an image to represent this newspaper headline : ${article.headline}`);
-            return {
-                ...article,
-                image: image.imageUrl,
-            };
-        }))
-
-        // SAVING
-        await submitArticles(finalArticlesWithImages)
+        return data;
 
     } catch (error) {
-        console.error('Error generating articles:', error);
+        console.error('Error fetching articles:', error);
     } 
 };
+
+// export const generateArticle = async (channelId: string) => {
+//     try {
+
+//         console.log("GENERATING ARTICLE FOR CHANNEL", channelId)
+
+//         // GET RELEVANT CASTS
+//         const feedRes: any[] = await fetchFeed(channelId);
+
+//         console.log("FEED RES", feedRes)
+
+//         const fetchedRelevantCasts = feedRes.filter((cast) => {
+//                 const castTimestamp = new Date(cast.timestamp);
+//                 const now = new Date();
+//                 now.setDate(now.getDate() - 1);
+//                 return castTimestamp > now;
+//             }).map((cast) => {
+//                 return {
+//                     ...cast,
+//                     likes: cast.reactions.likes.length,
+//                 };
+//             });
+
+//         const castsWithOverTenLikes = fetchedRelevantCasts.filter((cast) => cast.likes > 10);
+
+//         // ADD IMAGE DESCRIPTIONS
+//         const imageDescriptions = await Promise.all(castsWithOverTenLikes.map((cast: any) => {
+
+//             if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
+//                 return describeImage(cast.embeds[0].url)
+//             } else if (cast?.embeds[1]?.url && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
+//                 return describeImage(cast.embeds[1].url)
+//             } else if (cast?.frames?.[0]?.image) {
+//                 return describeImage(cast.frames[0].image)
+//             } else {
+//                 return Promise.resolve(null)
+//             }
+
+//         }));
+
+//         const castsWithImageDescs = castsWithOverTenLikes.map((cast: any, index: number) => {
+//             return { ...cast, text: `CAST TEXT: ${cast.text} ${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
+//         })
+
+//         console.log("NOW ORGANIZING CASTS BY TOPIC ")
+//         // Organize cast hashes by topic
+//         let topicallySortedCastHashes = await organizeHashesByTopic(JSON.stringify(castsWithImageDescs));
+
+//         let parsedHashes = parseJSONStringHashes(topicallySortedCastHashes);
+
+//         const casts = parsedHashes.map((hashes: string[]) => castsWithImageDescs.filter((cast) => hashes.includes(cast.hash)));
+
+//         // WRITE ARTICLES
+//         const writtenArticles = await Promise.all(casts.map((casts: any[]) => writeArticle(JSON.stringify(castsWithImageDescs))));
+
+//         // FORMATTING
+//         const addedLinks = writtenArticles.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
+
+//         const finalArticles = addedLinks.map((article: string) => parseArticleToJSON(article)).map((article: any, index: number) => {
+//             return {
+//                 ...article,
+//                 sources: casts[index].map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
+//                 channel_id: channelId,
+//             };
+//         });
+
+//         // GENERATE IMAGES
+//         const finalArticlesWithImages = await Promise.all(finalArticles.map(async (article: any) => {
+//             const image = await generateImage(`Create an image to represent this newspaper headline : ${article.headline}`);
+//             return {
+//                 ...article,
+//                 image: image.imageUrl,
+//             };
+//         }))
+
+//         // SAVING
+//         await submitArticles(finalArticlesWithImages)
+
+//     } catch (error) {
+//         console.error('Error generating articles:', error);
+//     } 
+// };
