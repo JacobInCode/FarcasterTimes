@@ -2,8 +2,8 @@ import * as z from "zod"
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai-edge';
 import { createBrowserClient } from "@supabase/ssr";
-export const maxDuration = 25; // This function can run for a maximum of 300 seconds
-export const dynamic = 'force-dynamic';
+// export const maxDuration = 25; // This function can run for a maximum of 300 seconds
+// export const dynamic = 'force-dynamic';
 
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge'
