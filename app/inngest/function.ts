@@ -72,7 +72,7 @@ export const generateChannelArticle = inngest.createFunction(
         // WRITE ARTICLES 
         const writtenArticles = await step.run("write-articles", async () => {
 
-            const articles = await Promise.all(topicallyOrganizedCasts.map((casts: any[]) => writeArticle(JSON.stringify(castsWithImageDescs))));
+            const articles = await Promise.all(topicallyOrganizedCasts.map((casts: any[]) => writeArticle(JSON.stringify(casts))));
 
             // FORMATTING
             const addedLinks = articles.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
@@ -80,7 +80,10 @@ export const generateChannelArticle = inngest.createFunction(
             const finalArticles = addedLinks.map((article: string) => parseArticleToJSON(article)).map((article: any, index: number) => {
                 return {
                     ...article,
-                    sources: topicallyOrganizedCasts[index].map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
+                    sources: topicallyOrganizedCasts[index].map((cast: any) => { 
+                        console.log("CAST", cast)
+                        return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } 
+                    }),
                     channel_id: channelId,
                 };
             });
