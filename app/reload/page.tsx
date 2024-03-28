@@ -8,7 +8,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { organizeHashesByTopic, describeImage, fetchBulkCasts, fetchFeed, generateImage, submitArticles, writeArticle, generateArticles } from '@/lib/utils/fetch';
+import { organizeHashesByTopic, describeImage, fetchBulkCasts, fetchFeed, generateImage, submitArticles, writeArticle, generateArticle } from '@/lib/utils/fetch';
 import { CastsResponse } from '@neynar/nodejs-sdk/build/neynar-api/v2';
 import { formatArticleWithAuthorLinks, parseArticleToJSON, parseJSONStringHashes } from '@/lib/utils/helpers';
 import { channels } from '@/lib/utils/config';
@@ -28,7 +28,7 @@ const Reload: React.FC = () => {
                             disabled={loading}
                             variant={"secondary"}
                             className="h-8 bg-black text-white w-full"
-                            onClick={() => generateArticles(channel.id)}
+                            onClick={() => generateArticle(channel.id)}
                         >
                             {(loading && loadingChannelId === channel.id) && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                             Reload {channel.label}

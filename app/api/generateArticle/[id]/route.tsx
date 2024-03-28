@@ -13,7 +13,7 @@ export async function GET(req: Request) {
 
   // Send your event payload to Inngest
   await inngest.send({
-    name: "generate.articles",
+    name: "generate.article",
     data: {
       channelIds: [channelId]
     },

@@ -198,6 +198,7 @@ export async function fetchBulkCasts(hashes: string[][]): Promise<any> {
 
 export async function fetchFeed(channelId: string): Promise<any> {
     try {
+
         const response = await fetch(`${defaultUrl}/api/fetchFeed`, {
             method: 'POST',
             headers: {
@@ -491,8 +492,10 @@ export async function chooseChannelId(channelIds: string, article: string) {
     }
 };
 
-export const generateArticles = async (channelId: string) => {
+export const generateArticle = async (channelId: string) => {
     try {
+
+        console.log("GENERATING ARTICLE FOR CHANNEL", channelId)
 
         // GET RELEVANT CASTS
         const feedRes: any[] = await fetchFeed(channelId);
