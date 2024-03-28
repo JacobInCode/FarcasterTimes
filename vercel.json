@@ -2,15 +2,15 @@
     "crons": [
         {
           "path": "/api/generateArticle/ethereum",
-          "schedule": "30 4 * * *"
+          "schedule": "40 4 * * *"
         },
         {
             "path": "/api/generateArticle/farcaster",
-            "schedule": "30 5 * * *"
+            "schedule": "40 5 * * *"
         },
         {
             "path": "/api/generateArticle/business",
-            "schedule": "30 3 * * *"
+            "schedule": "40 3 * * *"
         },
         {
             "path": "/api/generateArticles/design",
