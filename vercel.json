@@ -6,11 +6,11 @@
         },
         {
             "path": "/api/generateArticle/farcaster",
-            "schedule": "25 13 * * *"
+            "schedule": "30 5 * * *"
         },
         {
             "path": "/api/generateArticle/business",
-            "schedule": "25 11 * * *"
+            "schedule": "30 3 * * *"
         },
         {
             "path": "/api/generateArticles/design",
