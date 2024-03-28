@@ -2,7 +2,7 @@
     "crons": [
         {
           "path": "/api/generateArticle/ethereum",
-          "schedule": "25 12 * * *"
+          "schedule": "30 4 * * *"
         },
         {
             "path": "/api/generateArticle/farcaster",
