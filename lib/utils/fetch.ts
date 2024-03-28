@@ -310,11 +310,11 @@ export async function writeArticle(casts: string) {
         "messages": [
             {
                 "role": "system",
-                "content": "You are a veteran journalist who has worked at the New York Times for years. Your writing is marked by a stark originality and concision, consistently eschewing the predictable and the overwrought in favor of the straightforward and genuine.\n\nYou are writing an article and a corresponding headline in the style of the New York Times about a series of related Farcaster casts. \n\n Your headlines are always original and uniquely describe the articles they represent. Your response should be formatted exactly like this : \n\nHEADLINE:\n\n headline goes here \n\nARTICLE:\n\n Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)"
+                "content": "You are a veteran journalist who has worked at the New York Times for years. Your writing is marked by a stark originality and concision, consistently eschewing the predictable and the overwrought in favor of the straightforward and genuine.\n\nYou are writing an article and a corresponding headline in the style of the New York Times about a series of related Farcaster casts. \n\n Your headlines are always original and uniquely describe the articles they represent. Your response should be formatted exactly like this: \n\nHEADLINE:\n\n headline goes here \n\nARTICLE:\n\n Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)"
             },
             {
                 "role": "user",
-                "content": "Write an article in the style of the new york times about the following Farcaster casts. Your response should be formatted exactly like this : \n\nHEADLINE:\n\n headline goes here \n\nARTICLE:\n\n Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)\n\n These are the casts: " + casts
+                "content": "Write an article in the style of the new york times about the following Farcaster casts. Your response should be formatted exactly like this: \n\nHEADLINE:\n\n headline goes here \n\nARTICLE:\n\n Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)\n\n These are the casts: " + casts
             }
         ],
         "temperature": 0.4,
@@ -514,6 +514,7 @@ export const generateArticle = async (channelId: string) => {
 
         const castsWithOverTenLikes = fetchedRelevantCasts.filter((cast) => cast.likes > 10);
 
+        // ADD IMAGE DESCRIPTIONS
         const imageDescriptions = await Promise.all(castsWithOverTenLikes.map((cast: any) => {
 
             if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
