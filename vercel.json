@@ -42,7 +42,7 @@
         },
         {
             "path": "/api/generateArticles/technology",
-            "schedule": "40 23 * * *"
+            "schedule": "28 23 * * *"
         }
       ]
 }
