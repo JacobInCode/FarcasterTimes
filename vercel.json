@@ -2,7 +2,7 @@
     "crons": [
         {
           "path": "/api/generateArticle/ethereum",
-          "schedule": "0 22 * * *"
+          "schedule": "1 22 * * *"
         },
         {
             "path": "/api/generateArticle/farcaster",
@@ -10,7 +10,7 @@
         },
         {
             "path": "/api/generateArticle/business",
-            "schedule": "10 23 * * *"
+            "schedule": "10 22 * * *"
         },
         {
             "path": "/api/generateArticle/design",
