@@ -9,6 +9,8 @@ export async function GET(req: Request) {
 
   const channelId = req.url.split('/').pop();
 
+  console.log(`Generating articles for channel ${channelId}`);
+
   // Send your event payload to Inngest
   await inngest.send({
     name: "generate.articles",
