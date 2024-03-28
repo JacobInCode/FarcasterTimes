@@ -1,8 +1,48 @@
 {
     "crons": [
         {
-          "path": "/api/generateArticles/farcaster",
-          "schedule": "20 * * * *"
+          "path": "/api/generateArticles/ethereum",
+          "schedule": "1 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/farcaster",
+            "schedule": "3 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/business",
+            "schedule": "5 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/design",
+            "schedule": "7 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/networkStates",
+            "schedule": "9 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/geopolitics",
+            "schedule": "11 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/bounties",
+            "schedule": "13 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/sports",
+            "schedule": "15 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/food",
+            "schedule": "18 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/games",
+            "schedule": "20 22 * * *"
+        },
+        {
+            "path": "/api/generateArticles/technology",
+            "schedule": "22 22 * * *"
         }
       ]
 }
