@@ -10,7 +10,7 @@
         },
         {
             "path": "/api/generateArticle/business",
-            "schedule": "10 22 * * *"
+            "schedule": "10 23 * * *"
         },
         {
             "path": "/api/generateArticle/design",
