@@ -534,6 +534,7 @@ export const generateArticle = async (channelId: string) => {
             return { ...cast, text: `CAST TEXT: ${cast.text} ${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
         })
 
+        console.log("NOW ORGANIZING CASTS BY TOPIC ")
         // Organize cast hashes by topic
         let topicallySortedCastHashes = await organizeHashesByTopic(JSON.stringify(castsWithImageDescs));
 
