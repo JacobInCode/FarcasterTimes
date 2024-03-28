@@ -35,12 +35,10 @@ export async function POST(
         });
 
         const openai = new OpenAIApi(configuration);
-        // Validate route params.
 
         const json = await req.json();
 
         const { model, max_tokens, messages, temperature, top_p, frequency_penalty, presence_penalty } = schema.parse(json);
-
         const chatMessages: ChatCompletionRequestMessage[] = messages.map((message: any) => {
             return {
                 role: message.role as ChatCompletionRequestMessageRoleEnum,

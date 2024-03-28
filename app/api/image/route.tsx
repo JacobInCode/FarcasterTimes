@@ -33,7 +33,9 @@ export async function POST(
 
         const { prompt } = schema.parse(json);
 
-        const image = await openai.images.generate({ model: "dall-e-3", prompt, style: 'vivid', response_format: 'b64_json', size:"1792x1024" });
+        console.log("image prompt", prompt)
+
+        const image = await openai.images.generate({ model: "dall-e-3", prompt: prompt.replace("'", ""), style: 'vivid', response_format: 'b64_json', size:"1792x1024" });
 
         // add image to supabase storage cover_photos 
 
@@ -54,7 +56,7 @@ export async function POST(
         return new Response(JSON.stringify({ imageUrl: `${randomId}.png` }));
 
     } catch (error) {
-        console.log("Error in ai chat route:", error)
+        console.log("Error in ai image gen route:", error)
         if (error instanceof z.ZodError) {
             return new Response(JSON.stringify(error.issues), { status: 422 })
         }

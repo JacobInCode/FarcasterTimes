@@ -13,9 +13,11 @@ export function parseArticleToJSON(articleText: string): Article {
     const [headlinePart, articlePart] = articleText.split("\n\nArticle:\n\n");
 
     // Remove the "Headline:" prefix and trim any leading/trailing whitespace.
-    const headline = headlinePart.replace("Headline: ", "").trim();
 
+    const headline = headlinePart.replace("Headline: ", "").trim();
+console.log(headline)
     // Trim the article part to remove any leading/trailing whitespace.
+    console.log(articlePart)
     const body = articlePart.trim();
 
     return { headline, body };
@@ -28,6 +30,7 @@ export const parseJSONStringHashes = (hashes: string): any[] => {
             hashes = hashes.match(/\[(.|\s)*?\]/)?.[0]!;
         }
     }
+
     return JSON.parse(hashes);
 }
 

@@ -24,8 +24,6 @@ export async function POST(
 
         const json = await req.json();
 
-        console.log("json", json)
-
         const { hashes: parsedHashes } = schema.parse(json);
 
         console.log("hashes", parsedHashes)

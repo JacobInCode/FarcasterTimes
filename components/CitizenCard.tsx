@@ -5,7 +5,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -14,11 +13,12 @@ import { cn, removeMarkdownLinks } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, submitArticles, writeArticle } from "@/lib/utils/fetch";
+import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, submitArticles, writeArticle, chooseChannelId } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
-import { Expand, ExpandIcon, Loader2Icon, Minimize, MinusCircle, PlusIcon, X } from "lucide-react";
+import { Loader2Icon, PlusIcon, X } from "lucide-react";
 import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { formatArticleWithAuthorLinks, parseArticleToJSON } from "@/lib/utils/helpers";
+import { channels } from "@/lib/utils/config";
 
 const CitizenCard: React.FC = () => {
 
@@ -41,8 +41,6 @@ const CitizenCard: React.FC = () => {
         }
     }
 
-    const channelId = 'citizen';
-
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -55,11 +53,11 @@ const CitizenCard: React.FC = () => {
                 return;
             }
 
+            // get casts from warpcast urls
             const castsRes: CastResponse[] = await lookUpCastByHashOrWarpcastUrl(filteredUrls as string[]);
+            const mappedCasts = castsRes.map(c => c.cast).map((cast: any) => { return { text: cast.text, author_unique_username: cast.author.username, author_display_name: cast.author.display_name, author_id: cast.author.fid, cast_id: cast.hash } })
 
-            console.log(castsRes);
-            const mappedAndFilteredCasts = castsRes.map(c => c.cast).map((cast: any) => { return { text: cast.text, author_unique_username: cast.author.username, author_display_name: cast.author.display_name, author_id: cast.author.fid, cast_id: cast.hash } })
-
+            // add image descriptions to any casts with images or frames
             const imageDescriptions = await Promise.all(castsRes.map(c => c.cast).map((cast: any) => {
 
                 if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
@@ -74,31 +72,35 @@ const CitizenCard: React.FC = () => {
 
             }));
 
-            const castsWithImageDescs = mappedAndFilteredCasts.map((cast: any, index: number) => {
+            const castsWithImageDescs = mappedCasts.map((cast: any, index: number) => {
                 return { ...cast, text: `CAST TEXT: ${cast.text}${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
             })
 
+            // write article
             const articleRes = await writeArticle(JSON.stringify(castsWithImageDescs));
-
             const parsedArticle = parseArticleToJSON(formatArticleWithAuthorLinks(articleRes));
+
+            // choose channel id from article text
+            const choosenChannelId = await chooseChannelId(JSON.stringify(channels.map(c => c.id)), `${parsedArticle.headline}\n\n${parsedArticle.body}`);
+
             const finalArticleObject = {
                 ...parsedArticle,
-                sources: mappedAndFilteredCasts.map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
-                channel_id: channelId,
+                sources: mappedCasts.map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
+                channel_id: channels.find(c => choosenChannelId.toLowerCase().includes(c.id.toLowerCase()))?.id || "",
             };
 
+            // generate image and speech
             const image = await generateImage(`Create an vibrant image to describe this headline: ${finalArticleObject.headline}`);
             const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${removeMarkdownLinks(finalArticleObject.body)}`);
 
-            const finalArticleObjectWithImage = {
+            // save article
+            const { data } = await submitArticles([{
                 ...finalArticleObject,
                 image: image.imageUrl,
                 audio: audio.speechUrl
-            };
+            }])
 
-            const { data } = await submitArticles([finalArticleObjectWithImage])
-
-            // console.log("PARSEDARTICLES", data);
+            // route to article
             router.push(`/article/${data[0].id}`);
 
         } catch (error) {
@@ -127,13 +129,14 @@ const CitizenCard: React.FC = () => {
                             key={index}
                             placeholder="Warpcast URL"
                             value={urls[index]}
+                            disabled={loading}
                             onChange={(e) => {
                                 const newUrls = [...urls];
                                 newUrls[index] = e.target.value;
                                 setUrls(newUrls as string[] | undefined[]);
                             }}
                         />
-                        {index !== 0 && <X className="absolute hover:text-red-200 cursor-pointer right-0 top-2 text-gray-300 z-10 h-4 w-4 mr-2" onClick={() => subtractUrl(index)} />}
+                        {index !== 0 && <X className={cn("absolute hover:text-red-200 cursor-pointer right-0 top-2 text-gray-300 z-10 h-4 w-4 mr-2", {"pointer-events-none": loading})} onClick={() => subtractUrl(index)} />}
                     </div>
                 ))}
                 <div className="flex justify-center w-full">
@@ -141,6 +144,7 @@ const CitizenCard: React.FC = () => {
                         variant="ghost"
                         className="h-6 text-gray-500 text-[10px] p-0"
                         onClick={addUrl}
+                        disabled={loading}
                     >
                         <PlusIcon className="h-3 w-3 mr-2" />
                         Add URL

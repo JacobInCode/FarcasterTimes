@@ -5,10 +5,7 @@ import { Analytics } from "@vercel/analytics/react"
 import "./globals.css";
 import TitleLogo from '@/components/TitleLogo';
 import { TailwindIndicator } from '@/components/TailwindIndicator';
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://citizentimes.xyz`
-  : "http://localhost:3000";
+import { defaultUrl } from '@/lib/utils/config';
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
