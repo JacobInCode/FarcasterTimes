@@ -86,7 +86,7 @@ export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any
     try {
 
         // console.log("urls", urls)
-        const response = await fetch(`api/lookUpCastByHashOrWarpcastUrl`, {
+        const response = await fetch(`${defaultUrl}api/lookUpCastByHashOrWarpcastUrl`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
