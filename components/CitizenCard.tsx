@@ -55,7 +55,7 @@ const CitizenCard: React.FC = () => {
 
             // get casts from warpcast urls
             const castsRes: CastResponse[] = await lookUpCastByHashOrWarpcastUrl(filteredUrls as string[]);
-            const mappedCasts = castsRes.map(c => c.cast).map((cast: any) => { return { text: cast.text, author_unique_username: cast.author.username, author_display_name: cast.author.display_name, author_id: cast.author.fid, cast_id: cast.hash } })
+            const mappedCasts = castsRes.map(c => c.cast).map((cast: any) => cast)
 
             // add image descriptions to any casts with images or frames
             const imageDescriptions = await Promise.all(castsRes.map(c => c.cast).map((cast: any) => {

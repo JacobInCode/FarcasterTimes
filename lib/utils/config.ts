@@ -9,7 +9,7 @@ export const channels = [
     { id: "sports", label: "Sports", sources: ["sports", "esports"] },
     { id: "food", label: "Food", sources: ["food"] },
     { id: "games", label: "Games", sources: ["games"] },
-    { id: "technology", label: "Technology", sources: ["technology"] },
+    { id: "technology", label: "Technology", sources: ["technology", "dev"] },
 ];
 
 export const symbols = ['ETH', 'BTC', 'SOL'];
