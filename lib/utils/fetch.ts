@@ -497,6 +497,8 @@ export const generateArticles = async (channelId: string) => {
         // GET RELEVANT CASTS
         const feedRes: any[] = await fetchFeed(channelId);
 
+        console.log("FEED RES", feedRes)
+
         const fetchedRelevantCasts = feedRes.filter((cast) => {
                 const castTimestamp = new Date(cast.timestamp);
                 const now = new Date();
