@@ -244,17 +244,26 @@ export async function fetchArticle(id: string): Promise<any> {
 export async function initialFetch(channel_id: string) {
 
     const fetchPrice = async (symbol: string) => {
-        const response = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}`, {
-            method: 'GET',
-            // @ts-ignore
-            headers: {
-                'X-CMC_PRO_API_KEY': process.env.COIN_MARKET_CAP_API_KEY,
-                'Accept': 'application/json'
-            }
-        });
+        try {
+            const response = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=${symbol}`, {
+                method: 'GET',
+                // @ts-ignore
+                headers: {
+                    'X-CMC_PRO_API_KEY': process.env.COIN_MARKET_CAP_API_KEY,
+                    'Accept': 'application/json'
+                }
+            });
 
-        const res = await response.json();
-        return res.data[symbol].quote.USD.price;
+            if (!response.ok) {
+                throw new Error('Failed to fetch price');
+            }
+
+            const res = await response.json();
+            return res.data[symbol].quote.USD.price;
+        } catch (error) {
+            console.error('Error fetching price:', error);
+            throw error;
+        }
     };
 
     const fetchPrices = async (symbols: string[]) => {
