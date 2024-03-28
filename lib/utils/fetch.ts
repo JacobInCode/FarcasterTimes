@@ -85,7 +85,7 @@ export async function submitArticles(articles: Article[]) {
 export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any> {
     try {
 
-        // console.log("urls", urls)
+        console.log("url", `${defaultUrl}api/lookUpCastByHashOrWarpcastUrl`)
         const response = await fetch(`${defaultUrl}api/lookUpCastByHashOrWarpcastUrl`, {
             method: 'POST',
             headers: {
