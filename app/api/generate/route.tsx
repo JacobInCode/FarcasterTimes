@@ -1,12 +1,8 @@
-import * as z from "zod"
-import { OpenAIStream, StreamingTextResponse } from 'ai'
+import * as z from "zod";
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage, ChatCompletionRequestMessageRoleEnum } from 'openai-edge';
 import { createBrowserClient } from "@supabase/ssr";
-// export const maxDuration = 25; // This function can run for a maximum of 300 seconds
-// export const dynamic = 'force-dynamic';
 
-// IMPORTANT! Set the runtime to edge
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 const schema = z.object({
     model: z.string(),
@@ -23,8 +19,7 @@ const schema = z.object({
 
 export async function POST(req: Request) {
     try {
-        const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
-
+        const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '');
         if (!supabaseAdmin) {
             throw new Error('Not authenticated');
         }
@@ -32,17 +27,18 @@ export async function POST(req: Request) {
         const configuration = new Configuration({
             apiKey: process.env.OPENAI_API_KEY,
         });
-
         const openai = new OpenAIApi(configuration);
 
         const json = await req.json();
         const { model, max_tokens, messages, temperature, top_p, frequency_penalty, presence_penalty } = schema.parse(json);
+
+        // Convert messages to the required format for OpenAI API
         const chatMessages: ChatCompletionRequestMessage[] = messages.map((message: any) => ({
             role: message.role as ChatCompletionRequestMessageRoleEnum,
             content: message.content,
         }));
 
-        const response = await openai.createChatCompletion({
+        const responsePromise = openai.createChatCompletion({
             model,
             stream: true,
             max_tokens,
@@ -53,35 +49,45 @@ export async function POST(req: Request) {
             presence_penalty,
         });
 
-        // Adjusted part: Setup for streaming with initial delay handling
-        let hasStreamStarted = false;
+        let streamStarted = false;
 
-        // Setup a timeout to send an initial message if the stream is delayed
-        const initialTimeout = setTimeout(() => {
-            if (!hasStreamStarted) {
-                // Stream hasn't started, so send an initial message (e.g., empty string or placeholder)
-                // Note: You may need to adjust how this is sent based on your StreamingTextResponse API
-                // This is a placeholder response. You might need to use a specific method to send data in your streaming response.
-                console.log("Stream delayed, sending initial data.");
-            }
-        }, 5000); // 5 seconds
+        const stream = new ReadableStream({
+            start(controller) {
+                const initialTimeout = setTimeout(() => {
+                    if (!streamStarted) {
+                        // Send an initial message if the stream hasn't started
+                        controller.enqueue("Initial data due to delay.");
+                    }
+                }, 5000); // 5 seconds
 
-        // Example of handling the OpenAI stream
-        // You will need to integrate this logic with your actual stream handling
-        const stream = OpenAIStream(response);
+                responsePromise.then(response => {
+                    streamStarted = true;
+                    clearTimeout(initialTimeout);
 
-        stream.getReader().read().then(({ done, value }) => {
-            if (done) {
-                console.log("Stream ended.");
-            } else {
-                console.log("Stream started.");
-                clearTimeout(initialTimeout); // Clear the initial timeout as the stream has started
-                hasStreamStarted = true;
+                    // Assuming OpenAIStream wraps the response in a way that we can read it as a stream
+                    const reader = response?.body?.getReader();
+                    const push = () => {
+                        reader?.read().then(({ done, value }) => {
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            controller.enqueue(value);
+                            push();
+                        }).catch(error => {
+                            console.error(error);
+                            controller.error(error);
+                        });
+                    };
+                    push();
+                }).catch(error => {
+                    console.error("Error setting up the OpenAI stream:", error);
+                    controller.error(error);
+                });
             }
         });
 
-        // Assuming StreamingTextResponse is your way of returning a streaming response
-        return new StreamingTextResponse(stream);
+        return new Response(stream, { headers: { 'Content-Type': 'text/plain' } });
     } catch (error) {
         console.error("Error in AI chat route:", error);
         if (error instanceof z.ZodError) {
