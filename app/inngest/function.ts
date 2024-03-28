@@ -35,6 +35,8 @@ export const generateChannelArticle = inngest.createFunction(
         const castsWithImageDescs = await step.run("image-descriptions", async () => {
 
             const imageDescriptions = await Promise.all(channelCasts.map((cast: any) => {
+                // stop describing images for testing
+                return Promise.resolve(null)
 
                 if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
                     return describeImage(cast.embeds[0].url)
