@@ -16,10 +16,9 @@ export const symbols = ['ETH', 'BTC', 'SOL'];
 
 export const SUPABASE_IMAGE_URL = 'https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos'
 
-export const defaultUrl = typeof window !== 'undefined' ? "" : process.env.VERCEL_URL
+export const defaultUrl = typeof window !== 'undefined' ? "" : process.env.NODE_ENV === 'production'
 ? "https://citizentimes.xyz/"
 : "http://localhost:3000/";
-
 
 
     // const channelIds = [
