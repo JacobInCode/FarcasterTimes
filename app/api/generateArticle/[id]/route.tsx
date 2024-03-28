@@ -15,7 +15,7 @@ export async function GET(req: Request) {
   await inngest.send({
     name: "generate.article",
     data: {
-      channelIds: [channelId]
+      channelId
     },
   });
 
