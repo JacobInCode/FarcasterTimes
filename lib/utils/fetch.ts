@@ -82,70 +82,6 @@ export async function submitArticles(articles: Article[]) {
     }
 }
 
-export async function describeImage(image_url: string) {
-
-    const requestBody = {
-        "model": "gpt-4-vision-preview",
-        "messages": [
-            {
-                role: "user",
-                content: [
-                    { type: "text", text: "What’s in this image?" },
-                    {
-                        type: "image_url",
-                        image_url
-                    },
-                ],
-            },
-        ],
-        "temperature": 0.4,
-        "max_tokens": 4095,
-        "top_p": 0.18,
-        "frequency_penalty": 0,
-        "presence_penalty": 0.31
-    };
-
-    try {
-        const response = await fetch(`${defaultUrl}/api/generate`, { // Use the correct endpoint
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                // Include any additional headers as needed, such as authorization headers
-            },
-            body: JSON.stringify(requestBody),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = response.body as ReadableStream<Uint8Array>;
-        const reader = data.getReader();
-        const decoder = new TextDecoder();
-        let content = '';
-
-        while (true) {
-            try {
-                const { value, done } = await reader.read();
-                if (done) break;
-
-                content += decoder.decode(value, { stream: true })
-
-            } catch (readError) {
-                console.error('Error reading data stream:', readError);
-            }
-        }
-
-        // const data = await response.json();
-        console.log("IMAGE desc ", content); // Process the response data as needed
-        // If your response is a stream, handle accordingly
-        return content;
-    } catch (error) {
-        console.error('Error calling the API:', error);
-        throw error;
-    }
-}
-
 export async function lookUpCastByHashOrWarpcastUrl(urls: string[]): Promise<any> {
     try {
 
@@ -304,6 +240,70 @@ export async function initialFetch(channel_id: string) {
 }
 
 // CHAT GPT CALLS 
+
+export async function describeImage(image_url: string) {
+
+    const requestBody = {
+        "model": "gpt-4-vision-preview",
+        "messages": [
+            {
+                role: "user",
+                content: [
+                    { type: "text", text: "What’s in this image?" },
+                    {
+                        type: "image_url",
+                        image_url
+                    },
+                ],
+            },
+        ],
+        "temperature": 0.4,
+        "max_tokens": 4095,
+        "top_p": 0.18,
+        "frequency_penalty": 0,
+        "presence_penalty": 0.31
+    };
+
+    try {
+        const response = await fetch(`${defaultUrl}/api/generate`, { // Use the correct endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any additional headers as needed, such as authorization headers
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = response.body as ReadableStream<Uint8Array>;
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let content = '';
+
+        while (true) {
+            try {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                content += decoder.decode(value, { stream: true })
+
+            } catch (readError) {
+                console.error('Error reading data stream:', readError);
+            }
+        }
+
+        // const data = await response.json();
+        console.log("IMAGE desc ", content); // Process the response data as needed
+        // If your response is a stream, handle accordingly
+        return content;
+    } catch (error) {
+        console.error('Error calling the API:', error);
+        throw error;
+    }
+}
 
 export async function writeArticle(casts: string) {
 
