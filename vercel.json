@@ -1,1 +1,8 @@
-{}
+{
+    "crons": [
+        {
+          "path": "/api/generateArticles/ethereum",
+          "schedule": "0 5 * * *"
+        }
+      ]
+}
