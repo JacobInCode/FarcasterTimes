@@ -13,12 +13,9 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { describeImage, generateSpeech, generateImage, lookUpCastByHashOrWarpcastUrl, submitArticles, writeArticle, chooseChannelId, generateCitizenArticle } from "@/lib/utils/fetch";
+import { generateCitizenArticle } from "@/lib/utils/fetch";
 import { useRouter } from "next/navigation";
 import { Loader2Icon, PlusIcon, X } from "lucide-react";
-import { CastResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
-import { formatArticleWithAuthorLinks, parseArticleToJSON } from "@/lib/utils/helpers";
-import { channels } from "@/lib/utils/config";
 
 const CitizenCard: React.FC = () => {
 
