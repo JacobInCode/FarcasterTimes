@@ -17,7 +17,7 @@ export const symbols = ['ETH', 'BTC', 'SOL'];
 export const SUPABASE_IMAGE_URL = 'https://fthzoepekxipizxebefk.supabase.co/storage/v1/object/public/cover_photos'
 
 export const defaultUrl = process.env.VERCEL_URL
-? process.env.VERCEL_URL
+? "http://citizentimes.xyz"
 : "http://localhost:3000";
 
 
