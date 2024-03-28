@@ -1,7 +1,4 @@
-// import { getServerSession } from "next-auth"
 import * as z from "zod"
-// import { createClient } from '@/utils/supabase/server'
-// import { cookies } from 'next/headers'
 import OpenAI from "openai";
 import { createBrowserClient } from "@supabase/ssr";
 import { decode } from 'base64-arraybuffer'
@@ -9,9 +6,6 @@ import { decode } from 'base64-arraybuffer'
 import { v4 as uuidv4 } from 'uuid';
 export const maxDuration = 300; // This function can run for a maximum of 300 seconds
 export const dynamic = "force-dynamic";
-
-// IMPORTANT! Set the runtime to edge
-// export const runtime = 'edge'
 
 const schema = z.object({
     prompt: z.string(),
@@ -34,13 +28,8 @@ export async function POST(
 
         const { prompt } = schema.parse(json);
 
-        console.log("image prompt", prompt)
-
         const image = await openai.images.generate({ model: "dall-e-3", prompt: prompt.replace("'", ""), style: 'vivid', response_format: 'b64_json', size:"1792x1024" });
 
-        // add image to supabase storage cover_photos 
-
-        // console.log("image", image.data[0])
         const randomId = uuidv4()
 
         if (image.data[0].b64_json) {
