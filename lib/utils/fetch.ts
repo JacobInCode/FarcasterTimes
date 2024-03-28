@@ -295,8 +295,6 @@ export async function describeImage(image_url: string) {
             }
         }
 
-        // const data = await response.json();
-        console.log("IMAGE desc ", content); // Process the response data as needed
         // If your response is a stream, handle accordingly
         return content.replace("***", "");
     } catch (error) {
@@ -312,11 +310,11 @@ export async function writeArticle(casts: string) {
         "messages": [
             {
                 "role": "system",
-                "content": "You are a veteran journalist who has worked at the New York Times for years. Your writing is marked by a stark originality and concision, consistently eschewing the predictable and the overwrought in favor of the straightforward and genuine.\n\nYou are writing an article and a corresponding headline in the style of the New York Times about a series of related Farcaster casts. \n\n Your headlines are always original and uniquely describe the articles they represent. Your response should be formatted like this : \n Headline : headline goes here \n\n Article : Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)"
+                "content": "You are a veteran journalist who has worked at the New York Times for years. Your writing is marked by a stark originality and concision, consistently eschewing the predictable and the overwrought in favor of the straightforward and genuine.\n\nYou are writing an article and a corresponding headline in the style of the New York Times about a series of related Farcaster casts. \n\n Your headlines are always original and uniquely describe the articles they represent. Your response should be formatted exactly like this : \n\nHEADLINE:\n\n headline goes here \n\nARTICLE:\n\n Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)"
             },
             {
                 "role": "user",
-                "content": "Write an article in the style of the new york times about the following Farcaster casts. \n \nThese are the casts: " + casts
+                "content": "Write an article in the style of the new york times about the following Farcaster casts. Your response should be formatted exactly like this : \n\nHEADLINE:\n\n headline goes here \n\nARTICLE:\n\n Article goes here \n\n If you mention an author, instead of just writing their name, write (AUTHOR: author_unique_username goes here)\n\n These are the casts: " + casts
             }
         ],
         "temperature": 0.4,

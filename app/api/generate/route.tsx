@@ -12,7 +12,9 @@ function withInitialMessage(originalStream: any) {
     const wrappedStream = new ReadableStream({
         start(controller) {
             // Immediately queue an initial blank message
-            controller.enqueue("***"); // or whatever constitutes a "blank" message in your context
+            const encoder = new TextEncoder();
+            const blankMessageBytes = encoder.encode("***");
+            controller.enqueue(blankMessageBytes);
             initialMessageSent = true;
 
             // Then, continue reading from the original stream

@@ -10,14 +10,14 @@ export function formatArticleWithAuthorLinks(article: string): string {
 
 export function parseArticleToJSON(articleText: string): Article {
     // Split the text by "Article:" to separate the headline and article.
-    const [headlinePart, articlePart] = articleText.split("\n\nArticle:\n\n");
+    const [headlinePart, articlePart] = articleText.split("\n\nARTICLE:\n\n");
 
     // Remove the "Headline:" prefix and trim any leading/trailing whitespace.
 
-    const headline = headlinePart.replace("Headline: ", "").trim();
-console.log(headline)
+    const headline = headlinePart.replace("HEADLINE:\n\n", "").trim();
+console.log("HEADLINE", headline)
     // Trim the article part to remove any leading/trailing whitespace.
-    console.log(articlePart)
+    console.log("ARTICLE", articlePart)
     const body = articlePart.trim();
 
     return { headline, body };
