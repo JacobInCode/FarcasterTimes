@@ -8,17 +8,16 @@ export const generateChannelArticle = inngest.createFunction(
     async ({ event, step }) => {
 
         const channelId = event.data.channelId;
+        const daysBack = event.data.daysBack || 1;
 
         // FETCH CHANNEL CASTS
         const channelCasts = await step.run("fetch-feed", async () => {
             const feedRes: any[] = await fetchFeed(channelId);
 
-            // console.log("FEED RES", feedRes)
-
             const fetchedRelevantCasts = feedRes.filter((cast) => {
                 const castTimestamp = new Date(cast.timestamp);
                 const now = new Date();
-                now.setDate(now.getDate() - 1);
+                now.setDate(now.getDate() - daysBack);
                 return castTimestamp > now;
             }).map((cast) => {
                 return {

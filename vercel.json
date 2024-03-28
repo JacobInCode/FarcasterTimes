@@ -2,47 +2,47 @@
     "crons": [
         {
           "path": "/api/generateArticle/ethereum",
-          "schedule": "0 20 * * *"
+          "schedule": "0 21 * * *"
         },
         {
             "path": "/api/generateArticle/farcaster",
-            "schedule": "5 20 * * *"
+            "schedule": "5 21 * * *"
         },
         {
             "path": "/api/generateArticle/business",
-            "schedule": "10 20 * * *"
+            "schedule": "10 21 * * *"
         },
         {
-            "path": "/api/generateArticles/design",
-            "schedule": "15 20 * * *"
+            "path": "/api/generateArticle/design",
+            "schedule": "15 21 * * *"
         },
         {
-            "path": "/api/generateArticles/networkStates",
-            "schedule": "20 20 * * *"
+            "path": "/api/generateArticle/networkStates",
+            "schedule": "21 21 * * *"
         },
         {
-            "path": "/api/generateArticles/geopolitics",
-            "schedule": "25 20 * * *"
+            "path": "/api/generateArticle/geopolitics",
+            "schedule": "25 21 * * *"
         },
         {
-            "path": "/api/generateArticles/bounties",
-            "schedule": "30 20 * * *"
+            "path": "/api/generateArticle/bounties",
+            "schedule": "30 21 * * *"
         },
         {
-            "path": "/api/generateArticles/sports",
-            "schedule": "35 20 * * *"
+            "path": "/api/generateArticle/sports",
+            "schedule": "35 21 * * *"
         },
         {
-            "path": "/api/generateArticles/food",
-            "schedule": "40 20 * * *"
+            "path": "/api/generateArticle/food",
+            "schedule": "40 21 * * *"
         },
         {
-            "path": "/api/generateArticles/games",
-            "schedule": "45 20 * * *"
+            "path": "/api/generateArticle/games",
+            "schedule": "45 21 * * *"
         },
         {
-            "path": "/api/generateArticles/technology",
-            "schedule": "50 20 * * *"
+            "path": "/api/generateArticle/technology",
+            "schedule": "50 21 * * *"
         }
       ]
 }
