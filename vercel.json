@@ -2,47 +2,7 @@
     "crons": [
         {
           "path": "/api/generateArticles/ethereum",
-          "schedule": "20 * * * *"
-        },
-        {
-            "path": "/api/generateArticles/farcaster",
-            "schedule": "3 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/business",
-            "schedule": "5 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/design",
-            "schedule": "7 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/networkStates",
-            "schedule": "9 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/geopolitics",
-            "schedule": "21 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/bounties",
-            "schedule": "13 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/sports",
-            "schedule": "15 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/food",
-            "schedule": "18 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/games",
-            "schedule": "20 21 * * *"
-        },
-        {
-            "path": "/api/generateArticles/technology",
-            "schedule": "40 21 * * *"
+          "schedule": "* 25 * * *"
         }
       ]
 }
