@@ -2,47 +2,47 @@
     "crons": [
         {
           "path": "/api/generateArticles/ethereum",
-          "schedule": "1 22 * * *"
+          "schedule": "1 11 * * *"
         },
         {
             "path": "/api/generateArticles/farcaster",
-            "schedule": "3 22 * * *"
+            "schedule": "3 11 * * *"
         },
         {
             "path": "/api/generateArticles/business",
-            "schedule": "5 22 * * *"
+            "schedule": "5 11 * * *"
         },
         {
             "path": "/api/generateArticles/design",
-            "schedule": "7 22 * * *"
+            "schedule": "7 11 * * *"
         },
         {
             "path": "/api/generateArticles/networkStates",
-            "schedule": "9 22 * * *"
+            "schedule": "9 11 * * *"
         },
         {
             "path": "/api/generateArticles/geopolitics",
-            "schedule": "11 22 * * *"
+            "schedule": "11 11 * * *"
         },
         {
             "path": "/api/generateArticles/bounties",
-            "schedule": "13 22 * * *"
+            "schedule": "13 11 * * *"
         },
         {
             "path": "/api/generateArticles/sports",
-            "schedule": "15 22 * * *"
+            "schedule": "15 11 * * *"
         },
         {
             "path": "/api/generateArticles/food",
-            "schedule": "18 22 * * *"
+            "schedule": "18 11 * * *"
         },
         {
             "path": "/api/generateArticles/games",
-            "schedule": "20 22 * * *"
+            "schedule": "20 11 * * *"
         },
         {
             "path": "/api/generateArticles/technology",
-            "schedule": "22 22 * * *"
+            "schedule": "11 11 * * *"
         }
       ]
 }
