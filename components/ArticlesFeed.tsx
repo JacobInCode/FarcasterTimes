@@ -1,52 +1,8 @@
 import React from 'react';
 import { Article } from '@/types';
 import { ArticleCardBig, ArticleCardGrid, ArticleCardSmall } from './ArticleCards';
-import { createBrowserClient } from '@supabase/ssr';
 
-export const revalidate = 0 // revalidate at most every hour
-
-const ArticlesFeed: React.FC<{ channelId: string }> = async ({ channelId }) => {
-
-    const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '');
-    let articles = null;
-
-    let query = supabaseAdmin
-        .from('articles')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(37);
-
-    if (channelId !== 'all') {
-        query = query.eq('channel_id', channelId);
-    }
-
-    try {
-        const { data: latestArticles, error: articlesError } = await query
-
-        if (articlesError) {
-            console.error(articlesError);
-        }
-
-        articles = latestArticles;
-    } catch (error) {
-        console.error(error);
-    }
-
-    // organize articles by created_at but zero out the minutes and seconds for every article where citizen === false
-    const mixedArticles = articles ? articles?.map((article: any) => {
-        const date = new Date(article.created_at);
-        if (article.citizen === false) {
-            date.setMinutes(0);
-            // make seconds a random amount between 0 and 59
-            date.setSeconds(Math.floor(Math.random() * 60));
-        }
-        return { ...article, created_at: date };
-    }) : null;
-
-    // sort by created_at
-    const sorted = mixedArticles ? mixedArticles?.sort((a: any, b: any) => b.created_at - a.created_at) : null;
-
-    const loadedArticles = channelId === "all" ? sorted : articles;
+const ArticlesFeed: React.FC<{ articles: Article[] | null }> = ({ articles: loadedArticles }) => {
 
     const endNumber = 9;
     const loadedArticlesFirstChunk = loadedArticles?.slice(0, endNumber) || [];

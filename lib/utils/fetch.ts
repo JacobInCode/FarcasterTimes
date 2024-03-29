@@ -178,7 +178,7 @@ export async function fetchArticle(id: string): Promise<any> {
     }
 }
 
-export async function getPrices() {
+export async function initialFetch(channelId: string) {
 
     const fetchPrice = async (symbol: string) => {
         try {
@@ -211,7 +211,32 @@ export async function getPrices() {
 
     const prices = await fetchPrices(symbols);
 
-    return { prices };
+    const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '');
+    let articles = null;
+
+    let query = supabaseAdmin
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(37);
+
+    if (channelId !== 'all') {
+        query = query.eq('channel_id', channelId);
+    }
+
+    try {
+        const { data: latestArticles, error: articlesError } = await query
+
+        if (articlesError) {
+            console.error(articlesError);
+        }
+
+        articles = latestArticles;
+    } catch (error) {
+        console.error(error);
+    }
+
+    return { prices, articles };
 }
 
 // CHAT GPT CALLS 
