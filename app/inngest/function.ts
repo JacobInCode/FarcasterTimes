@@ -136,7 +136,7 @@ export const sendEmails = inngest.createFunction(
 
         const emailData = {
             subject: "Citizen Times - Top 5 Articles",
-            text : "Here are the top 5 daily articles from Citizen Times",
+            text : "Here are the top 5 articles from Citizen Times over the last 24hrs.",
             html: generateEmailHTML(topFive.map((article: any) => ({ headline: article.headline, body: article.body.slice(0, 75), id: article.id }))),
         };
 
