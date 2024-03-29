@@ -1,6 +1,7 @@
-import { describeImage, fetchFeed, generateImage, organizeHashesByTopic, submitArticles, writeArticle } from "@/lib/utils/fetch";
+import { describeImage, fetchFeed, generateImage, getTopFiveArticles, organizeHashesByTopic, submitArticles, writeArticle } from "@/lib/utils/fetch";
 import { inngest } from "./client";
-import { formatArticleWithAuthorLinks, parseArticleToJSON, parseJSONStringHashes } from "@/lib/utils/helpers";
+import { formatArticleWithAuthorLinks, generateEmailHTML, parseArticleToJSON, parseJSONStringHashes } from "@/lib/utils/helpers";
+import { defaultUrl } from "@/lib/utils/config";
 
 export const generateChannelArticle = inngest.createFunction(
     { id: "generate-article" },
@@ -120,5 +121,43 @@ export const generateChannelArticle = inngest.createFunction(
 
         // console.log("SAVING ARTICLES");
 
+    },
+);
+
+export const sendEmails = inngest.createFunction(
+    { id: "send-emails" },
+    { event: "send.emails" },
+    async ({ event, step }) => {
+
+        // find top 5 articles from last 24 hrs 
+        const topFive = await getTopFiveArticles();
+
+        console.log(topFive);    
+
+        const emailData = {
+            subject: "Citizen Times - Top 5 Articles",
+            text : "Here are the top 5 daily articles from Citizen Times",
+            html: generateEmailHTML(topFive.map((article: any) => ({ headline: article.headline, body: article.body.slice(0, 75), id: article.id }))),
+        };
+
+        // send emails to subscribers
+
+        await step.run("send-email", async () => {
+            // send email
+            try {
+                const response = await fetch(`${defaultUrl}api/email`, { // Replace with your actual endpoint
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(emailData),
+                });
+    
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                console.error('Error sending email:', error);
+            }
+        })
     },
 );

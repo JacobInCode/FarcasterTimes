@@ -66,4 +66,34 @@ export function removeMarkdownLinks(inputText: string): string {
     
     // Replace markdown links with just the text part
     return inputText.replace(markdownLinkPattern, '$1');
-  }
+}
+
+export function generateEmailHTML(articles: any[]) {
+    // Assuming each article in the array has { headline, body, id }
+    const currentDate = new Date().toLocaleDateString("en-US", {
+        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+    });
+
+    let articlesHTML = articles.map(article =>
+        `<h3><a href="https://citizentimes.xyz/article/${article.id}" style="text-decoration: underline; color: black;">${article.headline}</a></h3>
+      <p style="text-decoration: none; color: gray;">${article.body}...</p><a href="https://citizentimes.xyz/article/${article.id}">Read more</a>`
+    ).join('');
+
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Citizen Times Newsletter</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
+        <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; color: black;">Citizen Times</h2>
+            <p style="text-align: center; color: #666;">${currentDate}</p>
+            ${articlesHTML}
+        </div>
+        </body>
+        </html>
+    `;
+}

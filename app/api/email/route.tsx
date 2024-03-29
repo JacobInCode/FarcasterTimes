@@ -1,8 +1,12 @@
+import { createBrowserClient } from '@supabase/ssr';
 import nodemailer from 'nodemailer';
 import * as z from "zod"
 
+export const maxDuration = 300; // This function can run for a maximum of 300 seconds
+export const dynamic = "force-dynamic";
+
 const schema = z.object({
-    recipients: z.array(z.string()),
+    // recipients: z.array(z.string()),
     subject: z.string(),
     text: z.string(),
     html: z.string(),
@@ -11,10 +15,26 @@ const schema = z.object({
 export async function POST(
     req: Request,
 ) {
+    const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
+
+    if (!supabaseAdmin) {
+        throw new Error('Not authenticated')
+    }
+
+    const { data , error } = await supabaseAdmin
+    .from('subscribers')
+    .select('*')
+    .limit(500);
+
+    if (error) {
+        throw error;
+    }
+
+    const recipients = data.map((subscriber: any) => subscriber.email);
 
     const json = await req.json();
 
-    const { recipients, subject, text, html } = schema.parse(json);
+    const {  subject, text, html } = schema.parse(json);
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',

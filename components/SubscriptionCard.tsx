@@ -12,8 +12,16 @@ import {
 import { Button } from './ui/button';
 import { Loader2Icon, PlusIcon } from 'lucide-react';
 import { Input } from './ui/input';
-import Link from 'next/link';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
+import { generateEmailHTML } from '@/lib/utils/helpers';
+import { getTopFiveArticles } from '@/lib/utils/fetch';
+
+// Example usage:
+const articles = [
+    { headline: "Headline of Article 1", body: "This is a one-sentence body paragraph for Article 1.", id: "123" },
+    { headline: "Headline of Article 2", body: "This is a one-sentence body paragraph for Article 2.", id: "456" },
+    // Add more articles as needed
+];
 
 interface SubscriptionCardProps {
     children: React.ReactNode;
@@ -24,40 +32,44 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ children }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
 
-    const fetchData = async () => {
+    const addEmail = async () => {
+
+        if (!value) {
+            return;
+        }
+
+        setLoading(true);
+
+        // const topFive = await getTopFiveArticles();
+
+        // console.log(topFive);    
+
+        // const emailData = {
+        //     recipients: [recipient],
+        //     subject,
+        //     text,
+        //     html: generateEmailHTML(topFive.map((article: any) => ({ headline: article.headline, body: article.body.slice(0, 75), id: article.id }))),
+        // };
+
+        try {
+            const response = await fetch('api/addSubscriber', { // Replace with your actual endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: value }),
+            });
+
+            const result = await response.json();
+            console.log(result);
+            alert('Subscribed successfully!');
+        } catch (error) {
+            console.error('Error sending email:', error);
+            alert('Failed to send email.');
+        } finally {
+            setLoading(false);
+        }
     };
-
-     // Preset demo data
-  const [recipient] = useState<string>('jcbssmall@gmail.com');
-  const [subject] = useState<string>('Demo Subject');
-  const [text] = useState<string>('This is a demo text email body.');
-  const [html] = useState<string>('<p>This is a <strong>demo HTML</strong> email body.</p>');
-
-  const sendEmail = async () => {
-    const emailData = {
-      recipients: [recipient],
-      subject,
-      text,
-      html,
-    };
-
-    try {
-      const response = await fetch('api/email', { // Replace with your actual endpoint
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData),
-      });
-
-      const result = await response.json();
-      console.log(result);
-      alert('Email sent successfully!');
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('Failed to send email.');
-    }
-  };
 
     return (
         <Dialog>
@@ -84,9 +96,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ children }) => {
                                 setValue(e.target.value);
                             }}
                         />
-
-                        {loading && <p className="text-xs w-full text-center">This could take a few minutes. Don't close this page.</p>}
-                        <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={sendEmail}>
+                        <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={addEmail}>
                             {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                             Subscribe
                         </Button>

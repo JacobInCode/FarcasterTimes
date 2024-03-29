@@ -609,3 +609,26 @@ export const generateCitizenArticle = async (filteredUrls: string[]) => {
 //         console.error('Error generating articles:', error);
 //     } 
 // };
+
+export async function getTopFiveArticles(): Promise<any> {
+    try {
+
+        const response = await fetch(`${defaultUrl}api/getTopFiveArticles`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Include any other necessary headers, such as authorization tokens
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching top 5 articles:', error);
+        throw error;
+    }
+}

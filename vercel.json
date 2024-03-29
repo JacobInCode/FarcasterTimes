@@ -43,6 +43,10 @@
         {
             "path": "/api/generateArticle/technology",
             "schedule": "50 20 * * *"
+        },
+        {
+            "path": "/api/sendEmails",
+            "schedule": "17 2 * * *"
         }
       ]
 }

@@ -4,7 +4,7 @@ import * as z from "zod"
 // import path from "path";
 import OpenAI from "openai";
 import { createBrowserClient } from "@supabase/ssr";
-import { decode } from 'base64-arraybuffer'
+// import { decode } from 'base64-arraybuffer'
 // @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 export const maxDuration = 300; // This function can run for a maximum of 300 seconds
