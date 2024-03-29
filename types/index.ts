@@ -7,4 +7,6 @@ export interface Article {
     image?: string;
     created_at?: Date;   
     audio?: string; 
+    channel_id?: string;
+    citizen?: boolean;
 }

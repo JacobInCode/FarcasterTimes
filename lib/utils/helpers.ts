@@ -1,4 +1,5 @@
 import { Article } from "@/types";
+import { channels } from "./config";
 
 export function formatArticleWithAuthorLinks(article: string): string {
     const authorRegex = /\(AUTHOR: ([^\)]+)\)/g;
@@ -97,3 +98,7 @@ export function generateEmailHTML(articles: any[]) {
         </html>
     `;
 }
+
+export const channelLabel = (channelId: string) => {
+    return channels.find(channel => channel.id === channelId)?.label || '';
+};

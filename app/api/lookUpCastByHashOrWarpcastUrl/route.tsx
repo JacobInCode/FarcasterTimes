@@ -25,11 +25,7 @@ export async function POST(
 
         const json = await req.json();
 
-        console.log("json", json)
-
         const { urls } = schema.parse(json);
-
-        console.log("urls", urls)
 
         const castsRes = await Promise.all(urls.map(url => client.lookUpCastByHashOrWarpcastUrl(url as string, CastParamType.Url)));
 

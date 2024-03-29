@@ -10,6 +10,7 @@ const articleSchema = z.object({
     channel_id: z.string(),
     image: z.string().optional(),
     audio: z.string().optional(),
+    citizen: z.boolean().optional(),
 });
 
 export async function POST(request: Request) {
@@ -20,6 +21,8 @@ export async function POST(request: Request) {
         // insert new articles to supabase db
         const data = await request.json();
         const articles = z.array(articleSchema).parse(data);
+
+        console.log('articles', articles);
         const insertData = articles.map(article => ({
             body: article.body,
             headline: article.headline,
@@ -28,22 +31,13 @@ export async function POST(request: Request) {
             image: article.image,
             audio: article.audio,
         }));
+
         const { data: newArticles, error } = await supabaseAdmin
             .from('articles')
             .insert(insertData)
             .select();
         if (error) {
             throw error;
-        }
-
-        const channel_ids = insertData.map((article) => article.channel_id);
-
-        const { data: updated, error: errorUpdated } = await supabaseAdmin
-        .from('generations')
-        .insert(channel_ids.map((channel_id) => ({ channel_id })));
-
-        if (errorUpdated) {
-            throw errorUpdated;
         }
 
         console.log('Successfully added the articles', newArticles);

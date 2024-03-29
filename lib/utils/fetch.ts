@@ -73,7 +73,7 @@ export async function submitArticles(articles: Article[]) {
 
         // Successfully added the article
         const newArticle = await response.json();
-        // console.log('Article submitted successfully:', newArticle);
+        console.log('Article submitted successfully:', newArticle);
         return { error: false, data: JSON.parse(newArticle) };
     } catch (error) {
         // Handle network errors
@@ -421,10 +421,6 @@ export async function organizeHashesByTopic(casts: string) {
             }
         }
 
-
-        // const data = await response.json();
-        // console.log(content); // Process the response data as needed
-        // If your response is a stream, handle accordingly
         return content.replace("***", "");
 
         // return data;
@@ -532,18 +528,18 @@ export const generateCitizenArticle = async (filteredUrls: string[]) => {
                 return { hash: cast.hash, username: cast.author.username, fid: cast.author.fid, likes, recasts, replies} 
             }),
             channel_id: channels.find(c => choosenChannelId.toLowerCase().includes(c.id.toLowerCase()))?.id || "",
-            citizen: true
         };
 
         // generate image and speech
         const image = await generateImage(`Create an vibrant image to describe this headline: ${finalArticleObject.headline}`);
-        const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${removeMarkdownLinks(finalArticleObject.body)}`);
+        // const audio = await generateSpeech(`${finalArticleObject.headline}\n\n${removeMarkdownLinks(finalArticleObject.body)}`);
 
         // save article
         const { data } = await submitArticles([{
             ...finalArticleObject,
             image: image.imageUrl,
-            audio: audio.speechUrl
+            // audio: audio.speechUrl,
+            citizen: true
         }])
 
         return data;
@@ -553,87 +549,6 @@ export const generateCitizenArticle = async (filteredUrls: string[]) => {
     } 
 };
 
-// export const generateArticle = async (channelId: string) => {
-//     try {
-
-//         console.log("GENERATING ARTICLE FOR CHANNEL", channelId)
-
-//         // GET RELEVANT CASTS
-//         const feedRes: any[] = await fetchFeed(channelId);
-
-//         console.log("FEED RES", feedRes)
-
-//         const fetchedRelevantCasts = feedRes.filter((cast) => {
-//                 const castTimestamp = new Date(cast.timestamp);
-//                 const now = new Date();
-//                 now.setDate(now.getDate() - 1);
-//                 return castTimestamp > now;
-//             }).map((cast) => {
-//                 return {
-//                     ...cast,
-//                     likes: cast.reactions.likes.length,
-//                 };
-//             });
-
-//         const castsWithOverTenLikes = fetchedRelevantCasts.filter((cast) => cast.likes > 10);
-
-//         // ADD IMAGE DESCRIPTIONS
-//         const imageDescriptions = await Promise.all(castsWithOverTenLikes.map((cast: any) => {
-
-//             if (cast?.embeds[0]?.url && (cast.embeds[0]?.url.includes("png") || cast.embeds[0].url.includes("jpg") || cast.embeds[0].url.includes("jpeg") || cast.embeds[0].url.includes("gif"))) {
-//                 return describeImage(cast.embeds[0].url)
-//             } else if (cast?.embeds[1]?.url && (cast.embeds[1].url.includes("png") || cast.embeds[1].url.includes("jpg") || cast.embeds[1].url.includes("jpeg") || cast.embeds[1].url.includes("gif"))) {
-//                 return describeImage(cast.embeds[1].url)
-//             } else if (cast?.frames?.[0]?.image) {
-//                 return describeImage(cast.frames[0].image)
-//             } else {
-//                 return Promise.resolve(null)
-//             }
-
-//         }));
-
-//         const castsWithImageDescs = castsWithOverTenLikes.map((cast: any, index: number) => {
-//             return { ...cast, text: `CAST TEXT: ${cast.text} ${!!imageDescriptions[index] ? "\n DESCRIPTION OF IMAGE INCLUDED IN CAST: " + imageDescriptions[index] : ""}` }
-//         })
-
-//         console.log("NOW ORGANIZING CASTS BY TOPIC ")
-//         // Organize cast hashes by topic
-//         let topicallySortedCastHashes = await organizeHashesByTopic(JSON.stringify(castsWithImageDescs));
-
-//         let parsedHashes = parseJSONStringHashes(topicallySortedCastHashes);
-
-//         const casts = parsedHashes.map((hashes: string[]) => castsWithImageDescs.filter((cast) => hashes.includes(cast.hash)));
-
-//         // WRITE ARTICLES
-//         const writtenArticles = await Promise.all(casts.map((casts: any[]) => writeArticle(JSON.stringify(castsWithImageDescs))));
-
-//         // FORMATTING
-//         const addedLinks = writtenArticles.filter(a => !!a).map((article: any) => formatArticleWithAuthorLinks(article));
-
-//         const finalArticles = addedLinks.map((article: string) => parseArticleToJSON(article)).map((article: any, index: number) => {
-//             return {
-//                 ...article,
-//                 sources: casts[index].map((cast: any) => { return { hash: cast.cast_id, username: cast.author_unique_username, fid: cast.author_id } }),
-//                 channel_id: channelId,
-//             };
-//         });
-
-//         // GENERATE IMAGES
-//         const finalArticlesWithImages = await Promise.all(finalArticles.map(async (article: any) => {
-//             const image = await generateImage(`Create an image to represent this newspaper headline : ${article.headline}`);
-//             return {
-//                 ...article,
-//                 image: image.imageUrl,
-//             };
-//         }))
-
-//         // SAVING
-//         await submitArticles(finalArticlesWithImages)
-
-//     } catch (error) {
-//         console.error('Error generating articles:', error);
-//     } 
-// };
 
 export async function getTopFiveArticles(): Promise<any> {
     try {

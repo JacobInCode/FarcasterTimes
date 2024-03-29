@@ -52,6 +52,8 @@ const CitizenCard: React.FC = () => {
 
             // @ts-ignore
             const data = await generateCitizenArticle(filteredUrls);
+
+            console.log(data);
             // route to article
             router.push(`/article/${data[0].id}`);
 

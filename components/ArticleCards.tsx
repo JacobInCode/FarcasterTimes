@@ -8,7 +8,8 @@ import { inter } from '@/app/fonts';
 import { cn } from '@/lib/utils';
 import { Article } from '@/types';
 import { SUPABASE_IMAGE_URL } from '@/lib/utils/config';
-import { estimateReadingTime, sliceAtNextSpace } from '@/lib/utils/helpers';
+import { channelLabel, sliceAtNextSpace } from '@/lib/utils/helpers';
+import { Bot, Cpu, User } from 'lucide-react';
 
 interface ArticleCardProps {
     article: Article;
@@ -16,6 +17,10 @@ interface ArticleCardProps {
     includeBorder?: boolean;
     nextArticle?: Article;
 }
+
+export const generationIcon = (citizen?: boolean) => {
+    return citizen ? <User className='h-2.5 w-2.5 text-gray-400 mr-1' /> : <Cpu className='h-2.5 w-2.5 text-gray-400 mr-1' />;
+};
 
 export const ArticleCardGrid: React.FC<ArticleCardProps> = ({ article }) => {
     return (
@@ -35,7 +40,7 @@ export const ArticleCardGrid: React.FC<ArticleCardProps> = ({ article }) => {
                     <Link href={`/article/${article.id}`} className='no-underline'>
                         <h3 className='text-sm mt-0 leading-[1.2rem]'>{article.headline}</h3>
                     </Link>
-                    <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(article.body)} MIN READ</p>
+                    <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                 </div>
             </div>
         </div>
@@ -65,7 +70,7 @@ export const ArticleCardSmall: React.FC<ArticleCardProps> = ({ article, idx, inc
                     <Markdown className='prose prose text-sm leading-[1.2rem] mb-1.5'>
                         {sliceAtNextSpace(article.body, 150) + "..."}
                     </Markdown>
-                    <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(article.body)} MIN READ</p>
+                    <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                 </div>
             </div>
         </div>
@@ -83,12 +88,12 @@ export const ArticleCardBig: React.FC<ArticleCardProps> = ({ article, idx, inclu
                         <Markdown className='prose prose text-sm leading-[1.2rem] mb-1.5'>
                             {sliceAtNextSpace(article.body, 150) + "..."}
                         </Markdown>
-                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(article.body)} MIN READ</p>
+                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                     </Link>
 
                     {nextArticle && <Link href={`/article/${nextArticle.id}`} className='no-underline'>
                         <p className='prose text-sm font-bold text-black leading-[1.3rem] pt-5 mb-3 border-t mb-1.5'>{nextArticle.headline}</p>
-                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{estimateReadingTime(nextArticle.body)} MIN READ</p>
+                        <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                     </Link>
                     }
                 </div>

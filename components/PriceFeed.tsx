@@ -15,7 +15,7 @@ const PriceFeed = ({ prices }: PriceFeedProps) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setPriceIndex((prevIndex) => (prevIndex + 1) % prices.length);
-        }, 10000); // 30 seconds
+        }, 5000); // 30 seconds
 
         return () => clearInterval(interval);
     }, [prices]);

@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils';
 import { inter } from '@/app/fonts';
 import { fetchArticle } from '@/lib/utils/fetch';
 import { SUPABASE_IMAGE_URL } from '@/lib/utils/config';
+import { channelLabel } from '@/lib/utils/helpers';
+import { generationIcon } from './ArticleCards';
 
 const ArticlePage: React.FC<{ article: Article | null, id: string | null }> = ({ article: passedArticle, id }) => {
     const [article, setArticle] = useState<Article | null>(passedArticle);
@@ -46,7 +48,10 @@ const ArticlePage: React.FC<{ article: Article | null, id: string | null }> = ({
                     <audio controls src={`${SUPABASE_IMAGE_URL}/${article?.audio}`} className="shadow-lg rounded-full border border-gray-300" />
                 </div>
             )}
-            {article.created_at && <p className={cn(inter.className, 'text-[10px] w-full text-right')}>Generated {new Date(article.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
+            <div className='flex w-full justify-between'>
+            <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400')}>{channelLabel(article?.channel_id || '').toUpperCase()}</p>
+            {article.created_at && <p className={cn(inter.className, 'text-[10px] text-right my-0 flex items-center space-x-4 h-4 leading-5')}>{generationIcon(article.citizen)}{article.citizen ? "Citizen" : "Auto" } Generated {new Date(article.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>}
+            </div>
             <Markdown className='prose max-w-2xl'>
                 {article.body}
             </Markdown>
