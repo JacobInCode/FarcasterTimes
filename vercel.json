@@ -46,7 +46,7 @@
         },
         {
             "path": "/api/sendEmails",
-            "schedule": "17 2 * * *"
+            "schedule": "23 2 * * *"
         }
       ]
 }
