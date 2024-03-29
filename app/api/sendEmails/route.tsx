@@ -12,6 +12,7 @@ export async function GET() {
   // Send your event payload to Inngest
   await inngest.send({
     name: "send.emails",
+    data: {}
   });
 
   return NextResponse.json("SENDING EMAILS");
