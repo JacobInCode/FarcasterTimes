@@ -30,6 +30,7 @@ export async function POST(request: Request) {
             channel_id: article.channel_id,
             image: article.image,
             audio: article.audio,
+            citizen: article.citizen,   
         }));
 
         const { data: newArticles, error } = await supabaseAdmin
