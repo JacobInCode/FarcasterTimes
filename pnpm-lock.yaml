@@ -12,10 +12,10 @@ dependencies:
     version: 1.0.2(@types/react@18.2.48)(react@18.2.0)
   '@supabase/ssr':
     specifier: latest
-    version: 0.1.0(@supabase/supabase-js@2.40.0)
+    version: 0.1.0(@supabase/supabase-js@2.41.1)
   '@supabase/supabase-js':
     specifier: latest
-    version: 2.40.0
+    version: 2.41.1
   '@tailwindcss/typography':
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.4.1)
@@ -52,6 +52,9 @@ dependencies:
   next:
     specifier: latest
     version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
+  nodemailer:
+    specifier: ^6.9.13
+    version: 6.9.13
   openai:
     specifier: ^4.28.4
     version: 4.28.4(encoding@0.1.13)
@@ -93,6 +96,9 @@ devDependencies:
   '@types/node':
     specifier: 20.11.5
     version: 20.11.5
+  '@types/nodemailer':
+    specifier: ^6.4.14
+    version: 6.4.14
   '@types/react':
     specifier: 18.2.48
     version: 18.2.48
@@ -758,14 +764,14 @@ packages:
       '@scure/base': 1.1.5
     dev: false
 
-  /@supabase/functions-js@2.1.5:
-    resolution: {integrity: sha512-BNzC5XhCzzCaggJ8s53DP+WeHHGT/NfTsx2wUSSGKR2/ikLFQTBCDzMvGz/PxYMqRko/LwncQtKXGOYp1PkPaw==}
+  /@supabase/auth-js@2.63.0:
+    resolution: {integrity: sha512-yIgcHnlgv24GxHtVGUhwGqAFDyJkPIC/xjx7HostN08A8yCy8HIfl4JEkTKyBqD1v1L05jNEJOUke4Lf4O1+Qg==}
     dependencies:
       '@supabase/node-fetch': 2.6.15
     dev: false
 
-  /@supabase/gotrue-js@2.62.2:
-    resolution: {integrity: sha512-AP6e6W9rQXFTEJ7sTTNYQrNf0LCcnt1hUW+RIgUK+Uh3jbWvcIST7wAlYyNZiMlS9+PYyymWQ+Ykz/rOYSO0+A==}
+  /@supabase/functions-js@2.2.2:
+    resolution: {integrity: sha512-sJGq1nludmi7pY/fdtCpyY/pYonx7MfHdN408bqb736guWcVI1AChYVbI4kUM978EuOE4Ci6l7bUudfGg07QRw==}
     dependencies:
       '@supabase/node-fetch': 2.6.15
     dev: false
@@ -795,12 +801,12 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@supabase/ssr@0.1.0(@supabase/supabase-js@2.40.0):
+  /@supabase/ssr@0.1.0(@supabase/supabase-js@2.41.1):
     resolution: {integrity: sha512-bIVrkqjAK5G3KjkIMKYKtAOlCgRRplEWjrlyRyXSOYtgDieiOhk2ZyNAPsEOa1By9OZVxuX5eAW1fitdnuxayw==}
     peerDependencies:
       '@supabase/supabase-js': ^2.33.1
     dependencies:
-      '@supabase/supabase-js': 2.40.0
+      '@supabase/supabase-js': 2.41.1
       cookie: 0.5.0
       ramda: 0.29.1
     dev: false
@@ -811,11 +817,11 @@ packages:
       '@supabase/node-fetch': 2.6.15
     dev: false
 
-  /@supabase/supabase-js@2.40.0:
-    resolution: {integrity: sha512-XF8OrsA13DYBL074sHH4M0NhXJCWhQ0R5JbVeVUytZ0coPMS9krRdzxl+0c4z4LLjqbm/Wdz0UYlTYM9MgnDag==}
+  /@supabase/supabase-js@2.41.1:
+    resolution: {integrity: sha512-xmECLhYugMo/6SObpsOhu5xaxVfsk+JK/d4JSh055bpESmgmN3PLpzbfqejKCpaUeeUNF21+lrJp/U9HQzT9mA==}
     dependencies:
-      '@supabase/functions-js': 2.1.5
-      '@supabase/gotrue-js': 2.62.2
+      '@supabase/auth-js': 2.63.0
+      '@supabase/functions-js': 2.2.2
       '@supabase/node-fetch': 2.6.15
       '@supabase/postgrest-js': 1.9.2
       '@supabase/realtime-js': 2.9.3
@@ -896,6 +902,12 @@ packages:
     resolution: {integrity: sha512-g557vgQjUUfN76MZAN/dt1z3dzcUsimuysco0KeluHgrPdJXkP/XdAURgyO2W9fZWHRtRBiVKzKn8vyOAwlG+w==}
     dependencies:
       undici-types: 5.26.5
+
+  /@types/nodemailer@6.4.14:
+    resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
+    dependencies:
+      '@types/node': 20.11.5
+    dev: true
 
   /@types/phoenix@1.6.4:
     resolution: {integrity: sha512-B34A7uot1Cv0XtaHRYDATltAdKx0BvVKNgYNqE4WjtPUa4VQJM7kxeXcVKaH+KS+kCmZ+6w+QaUdcljiheiBJA==}
@@ -2681,6 +2693,11 @@ packages:
 
   /node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
+    dev: false
+
+  /nodemailer@6.9.13:
+    resolution: {integrity: sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /normalize-path@3.0.0:
