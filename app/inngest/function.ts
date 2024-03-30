@@ -1,6 +1,6 @@
-import { describeImage, fetchFeed, generateImage, getTopFiveArticles, organizeHashesByTopic, submitArticles, writeArticle } from "@/lib/utils/fetch";
+import { describeImage, fetchFeed, generateImage, getTopFiveArticles, organizeHashesByTopic, submitArticles, writeArticle, genCitizenArticle } from "@/lib/utils/fetch";
 import { inngest } from "./client";
-import { formatArticleWithAuthorLinks, generateEmailHTML, parseArticleToJSON, parseJSONStringHashes } from "@/lib/utils/helpers";
+import { formatArticleWithAuthorLinks, generateCitizenHTML, generateEmailHTML, parseArticleToJSON, parseJSONStringHashes } from "@/lib/utils/helpers";
 import { defaultUrl } from "@/lib/utils/config";
 
 export const generateChannelArticle = inngest.createFunction(
@@ -139,6 +139,46 @@ export const sendEmails = inngest.createFunction(
             text : "Here are the top 5 articles from Citizen Times over the last 24hrs.",
             html: generateEmailHTML(topFive.map((article: any) => ({ headline: article.headline, body: article.body.slice(0, 75), id: article.id }))),
         };
+
+        // send emails to subscribers
+
+        await step.run("send-emails", async () => {
+            // send email
+            try {
+                const response = await fetch(`${defaultUrl}api/batchEmail`, { // Replace with your actual endpoint
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(emailData),
+                });
+    
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                console.error('Error sending email:', error);
+            }
+        })
+    },
+);
+
+export const generateCitizenArticle = inngest.createFunction(
+    { id: "generate-citizen-article" },
+    { event: "generate.citizen.article" },
+    async ({ event, step }) => {
+
+        console.log("GENERATING CITIZEN ARTICLE", event.data.urls);
+
+        const data = await genCitizenArticle(event.data.urls);
+
+        const emailData = {
+            recipient: event.data.email,
+            subject: "Citizen Article Completed!",
+            text : "Your article has been generated successfully.",
+            html: generateCitizenHTML(data[0]),
+        };
+
+        console.log("EMAIL DATA", emailData);
 
         // send emails to subscribers
 

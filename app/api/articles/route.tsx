@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         const articles = z.array(articleSchema).parse(data);
 
         console.log('articles', articles);
-        const insertData = articles.map(article => ({
+        const insertData: any = articles.map(article => ({
             body: article.body,
             headline: article.headline,
             sources: article.sources,

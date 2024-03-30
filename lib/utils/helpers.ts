@@ -97,7 +97,30 @@ export function generateEmailHTML(articles: any[]) {
         </body>
         </html>
     `;
-}
+};
+
+export function generateCitizenHTML(article: Article) {
+
+    let articlesHTML =  `<h3><a href="https://citizentimes.xyz/article/${article.id}" style="text-decoration: underline; color: black;">${article.headline}</a></h3>
+      <p style="text-decoration: none; color: gray;">${article.body.slice(0,75)}...</p><a href="https://citizentimes.xyz/article/${article.id}">Read more</a>`
+
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Citizen Article Generated!</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4;">
+        <div style="max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="text-align: center; color: black;">Successfully Generated your Article!</h2>
+            ${articlesHTML}
+        </div>
+        </body>
+        </html>
+    `;
+};
 
 export const channelLabel = (channelId: string) => {
     return channels.find(channel => channel.id === channelId)?.label || '';

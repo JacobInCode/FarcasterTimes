@@ -486,7 +486,7 @@ export async function chooseChannelId(channelIds: string, article: string) {
     }
 };
 
-export const generateCitizenArticle = async (filteredUrls: string[]) => {
+export const genCitizenArticle = async (filteredUrls: string[]) => {
     try {
 
         // get casts from warpcast urls

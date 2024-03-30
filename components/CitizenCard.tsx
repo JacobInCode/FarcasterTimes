@@ -13,13 +13,11 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { generateCitizenArticle } from "@/lib/utils/fetch";
-import { useRouter } from "next/navigation";
-import { Loader2Icon, PlusIcon, X } from "lucide-react";
+import { PlusIcon, X } from "lucide-react";
+import ReceiveEmail from "./ReceiveEmail";
 
 const CitizenCard: React.FC = () => {
 
-    const router = useRouter();
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [urls, setUrls] = React.useState<(string | undefined)[]>([undefined]);
@@ -37,32 +35,6 @@ const CitizenCard: React.FC = () => {
             setUrls(newUrls);
         }
     }
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            // get hashes from urls 
-
-            const filteredUrls = urls.filter((url) => url !== undefined);
-
-            if (filteredUrls.length === 0 || filteredUrls.includes(undefined)) {
-                setError(true);
-                return;
-            }
-
-            // @ts-ignore
-            const data = await generateCitizenArticle(filteredUrls);
-
-            console.log(data);
-            // route to article
-            router.push(`/article/${data[0].id}`);
-
-        } catch (error) {
-            console.error('Error fetching articles:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     return (
         <Card className={cn(inter.className, "bg-gray-200 border-gray-300 flex-col w-full space-y-4 md:space-y-0 flex md:flex-row md:space-x-10 max-w-2xl p-5 rounded-sm")}>
@@ -90,7 +62,7 @@ const CitizenCard: React.FC = () => {
                                 setUrls(newUrls as string[] | undefined[]);
                             }}
                         />
-                        {index !== 0 && <X className={cn("absolute hover:text-red-200 cursor-pointer right-0 top-2 text-gray-300 z-10 h-4 w-4 mr-2", {"pointer-events-none": loading})} onClick={() => subtractUrl(index)} />}
+                        {index !== 0 && <X className={cn("absolute hover:text-red-200 cursor-pointer right-0 top-2 text-gray-300 z-10 h-4 w-4 mr-2", { "pointer-events-none": loading })} onClick={() => subtractUrl(index)} />}
                     </div>
                 ))}
                 <div className="flex justify-center w-full">
@@ -105,7 +77,10 @@ const CitizenCard: React.FC = () => {
                     </Button>}
                 </div>
                 {loading && <p className="text-xs w-full text-center">This could take a few minutes. Don't close this page.</p>}
-                <Button variant={"secondary"} className="h-8 bg-black text-white w-full" onClick={fetchData}>{loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} Publish</Button>
+                {/* @ts-ignore */}
+                <ReceiveEmail urls={urls} setUrls={setUrls}>
+                <Button disabled={urls.filter(u => !u).length > 0} variant={"secondary"} className="h-8 bg-black text-white w-full">Publish</Button>
+                </ReceiveEmail>
             </CardContent>
         </Card>
     );

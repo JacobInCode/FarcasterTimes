@@ -6,7 +6,7 @@ export const maxDuration = 300; // This function can run for a maximum of 300 se
 export const dynamic = "force-dynamic";
 
 const schema = z.object({
-    recipient: z.string(),
+    // recipients: z.array(z.string()),
     subject: z.string(),
     text: z.string(),
     html: z.string(),
@@ -21,9 +21,20 @@ export async function POST(
         throw new Error('Not authenticated')
     }
 
+    const { data , error } = await supabaseAdmin
+    .from('subscribers')
+    .select('*')
+    .limit(500);
+
+    if (error) {
+        throw error;
+    }
+
+    const recipients = data.map((subscriber: any) => subscriber.email);
+
     const json = await req.json();
 
-    const { recipient, subject, text, html } = schema.parse(json);
+    const {  subject, text, html } = schema.parse(json);
 
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -55,8 +66,7 @@ export async function POST(
     };
 
     try {
-        const results = await sendEmail(recipient);
-        console.log('Email sent:', results);
+        const results = await Promise.all(recipients.map(recipient => sendEmail(recipient)));
         return new Response(JSON.stringify(results), { status: 200 });
     } catch (error) {
         return new Response(null, { status: 500 })
