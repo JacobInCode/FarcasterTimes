@@ -14,7 +14,6 @@ import { Loader2Icon } from 'lucide-react';
 import { Input } from './ui/input';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { inngest } from '@/app/inngest/client';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface ReceiveEmailProps {
@@ -104,7 +103,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                                 {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Receive Email
                             </Button>
-                            <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={() => setSuccess(true)}>
+                            <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={fetchData}>
                                 {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Don't Receive Email
                             </Button>
