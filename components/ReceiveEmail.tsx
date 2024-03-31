@@ -5,7 +5,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -35,10 +34,12 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
     const [openSubscriber, setOpenSubscriber] = useState<boolean>(false);
 
     useEffect(() => {
-        if (success) {
-            setUrls([undefined]);
+        if (!openSubscriber) {
+            // setUrls([undefined]);
+            setValue("");
+            setSuccess(false);
         }
-    }, [success]);
+    }, [openSubscriber]);
 
     const fetchData = async () => {
         try {
@@ -55,7 +56,6 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                 data: { urls, email: value }
             });
 
-            // router.push('/');
             setSuccess(true);
 
         } catch (error) {
@@ -68,7 +68,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
 
     return (
         <Dialog open={openSubscriber} onOpenChange={() => setOpenSubscriber(!openSubscriber)}>
-            <DialogTrigger className='w-full'>{children}</DialogTrigger>
+            <DialogTrigger asChild className='w-full'>{children}</DialogTrigger>
             <DialogContent>
                 {success ? <Card className="border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm shadow-none">
                     <CardHeader className="p-0 space-y-3 w-full">
