@@ -28,7 +28,7 @@ function validateEmail(email: string): boolean {
 
 const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) => {
     const [value, setValue] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<number | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [openSubscriber, setOpenSubscriber] = useState<boolean>(false);
@@ -41,9 +41,9 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
         }
     }, [openSubscriber]);
 
-    const fetchData = async () => {
+    const fetchData = async (buttonIdx: number) => {
         try {
-            setLoading(true);
+            setLoading(buttonIdx);
 
             if (!validateEmail(value)) {
                 setError("Invalid email address");
@@ -69,7 +69,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
             console.error('Error fetching articles:', error);
             setError("An error occurred.");
         } finally {
-            setLoading(false);
+            setLoading(null);
         }
     };
 
@@ -106,12 +106,12 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                             }}
                         />
                         <div className='flex space-x-2 w-full'>
-                            <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={fetchData}>
-                                {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
+                            <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={() => fetchData(1)}>
+                                {loading === 1 && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Receive Email
                             </Button>
-                            <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={fetchData}>
-                                {/* {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} */}
+                            <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={() => fetchData(2)}>
+                                {loading === 2 && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Don't Receive Email
                             </Button>
                         </div>
