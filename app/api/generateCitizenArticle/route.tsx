@@ -8,6 +8,9 @@ const schema = z.object({
   email: z.string()
 });
 
+// Opt out of caching; every request should send a new event
+export const dynamic = "force-dynamic";
+
 // Create a simple async Next.js API route handler
 export async function POST(request: Request) {
 
