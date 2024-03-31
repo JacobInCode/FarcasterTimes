@@ -36,7 +36,9 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
       </div>
       <div className='px-8 sm:px-32 py-3 lg:p-5 w-full flex justify-center border-b border-gray-200 relative'>
         <div className={"hidden md:inline absolute left-0 flex flex-col space-y-0.5 pl-3 md:px-0"}>
-          <div className={cn(inter.className, 'text-xs font-bold')}>{format(new Date(), 'EEEE, MMMM d')}</div>
+          <div className={cn(inter.className, 'text-xs font-bold')}>
+            {format(new Date(), 'EEEE, MMMM d, yyyy')}
+          </div>          
           <div className={cn(inter.className, 'text-xs')}>Today's Date</div>
         </div>
         <Link href="/" className='cursor-pointer'>
@@ -67,12 +69,12 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
         <Sheet>
           <SheetTrigger><User className='h-4 w-4 absolute right-0 top-4' /></SheetTrigger>
           <SheetContent side="top" className='flex flex-col space-x-0 gap-0'>
-          <SubscriptionCard>
-            <div className={cn(inter.className, 'my-0 border-b border-black text-left py-4 items-center hover:underline text-xs')}>Subscribe</div>
-          </SubscriptionCard>
-          <Link href="/citizen" className={cn(inter.className, 'my-0 border-b border-black py-4 items-center hover:underline text-xs')}>
-            <p>Citizen</p>
-          </Link>
+            <SubscriptionCard>
+              <div className={cn(inter.className, 'my-0 border-b border-black text-left py-4 items-center hover:underline text-xs')}>Subscribe</div>
+            </SubscriptionCard>
+            <Link href="/citizen" className={cn(inter.className, 'my-0 border-b border-black py-4 items-center hover:underline text-xs')}>
+              <p>Citizen</p>
+            </Link>
           </SheetContent>
         </Sheet>
       </div>
