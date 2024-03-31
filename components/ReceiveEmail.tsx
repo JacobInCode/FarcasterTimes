@@ -50,11 +50,18 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                 return;
             }
 
-            // Send your event payload to Inngest
-            await inngest.send({
-                name: "generate.citizen.article",
-                data: { urls, email: value }
+            const response = await fetch('api/genCitizen', { // Use the correct endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include any additional headers as needed, such as authorization headers
+                },
+                body: JSON.stringify({urls: urls, email: value}),
             });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
             setSuccess(true);
 
@@ -104,7 +111,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                                 Receive Email
                             </Button>
                             <Button variant="secondary" className="h-8 bg-black text-white w-full" onClick={fetchData}>
-                                {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
+                                {/* {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />} */}
                                 Don't Receive Email
                             </Button>
                         </div>
