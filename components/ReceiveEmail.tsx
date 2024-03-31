@@ -14,6 +14,8 @@ import { Input } from './ui/input';
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog';
 import { inngest } from '@/app/inngest/client';
 import Link from 'next/link';
+import { inter } from '@/app/fonts';
+import { cn } from '@/lib/utils';
 
 interface ReceiveEmailProps {
     children: React.ReactNode;
@@ -77,7 +79,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
         <Dialog open={openSubscriber} onOpenChange={() => setOpenSubscriber(!openSubscriber)}>
             <DialogTrigger asChild className='w-full'>{children}</DialogTrigger>
             <DialogContent>
-                {success ? <Card className="border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm shadow-none">
+                {success ? <Card className={cn(inter.className, "border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm shadow-none")}>
                     <CardHeader className="p-0 space-y-3 w-full">
                         <CardTitle>Your Citizen Generated Articles wil be ready in about 4 minutes.</CardTitle>
                         <CardDescription>
@@ -85,13 +87,13 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                                 Head back to the home page.
                             </Link>
                         </CardDescription>
-                    </CardHeader> </Card> : <Card className="border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm shadow-none">
+                    </CardHeader> </Card> : <Card className={cn(inter.className, "border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm shadow-none")}>
                     <CardHeader className="p-0 space-y-3 w-full">
                         <CardTitle>Generate your Citizen Article</CardTitle>
                         <CardDescription>
                             Receive an email with a link to your generated article.
                         </CardDescription>
-                        <CardDescription className='text-xs'>
+                        <CardDescription className={cn(inter.className, 'text-xs')}>
                             You can also choose to not receive an email and view the article on the site when it finishes generating in about 4 mins.
                         </CardDescription>
                     </CardHeader>
@@ -106,11 +108,11 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                             }}
                         />
                         <div className='flex space-x-2 w-full'>
-                            <Button disabled={!loading && value !== ""} variant="secondary" className="h-8 bg-black text-white w-full" onClick={() => fetchData(1)}>
+                            <Button disabled={!loading && value !== ""} variant="secondary" className={cn(inter.className, "h-8 bg-black text-white w-full")} onClick={() => fetchData(1)}>
                                 {loading === 1 && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Receive Email
                             </Button>
-                            <Button disabled={!loading && value !== ""} variant="secondary" className="h-8 bg-black text-white w-full" onClick={() => fetchData(2)}>
+                            <Button disabled={!loading && value !== ""} variant="secondary" className={cn(inter.className, "h-8 bg-black text-white w-full")} onClick={() => fetchData(2)}>
                                 {loading === 2 && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Don't Receive Email
                             </Button>
