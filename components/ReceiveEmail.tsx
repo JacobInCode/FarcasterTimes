@@ -52,7 +52,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                 return;
             }
 
-            const response = await fetch('api/genCitizen', { // Use the correct endpoint
+            const response = await fetch('api/generateCitizenArticle', { // Use the correct endpoint
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
