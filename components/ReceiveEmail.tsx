@@ -108,11 +108,11 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
                             }}
                         />
                         <div className='flex space-x-2 w-full'>
-                            <Button disabled={!loading && value !== ""} variant="secondary" className={cn(inter.className, "h-8 bg-black text-white w-full")} onClick={() => fetchData(1)}>
+                            <Button disabled={!loading || value === ""} variant="secondary" className={cn(inter.className, "h-8 bg-black text-white w-full")} onClick={() => fetchData(1)}>
                                 {loading === 1 && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Receive Email
                             </Button>
-                            <Button disabled={!loading && value !== ""} variant="secondary" className={cn(inter.className, "h-8 bg-black text-white w-full")} onClick={() => fetchData(2)}>
+                            <Button disabled={!loading || value === ""} variant="secondary" className={cn(inter.className, "h-8 bg-black text-white w-full")} onClick={() => fetchData(2)}>
                                 {loading === 2 && <Loader2Icon className="h-4 w-4 animate-spin mr-3" />}
                                 Don't Receive Email
                             </Button>
