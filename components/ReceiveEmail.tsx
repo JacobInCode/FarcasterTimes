@@ -80,7 +80,7 @@ const ReceiveEmail: React.FC<ReceiveEmailProps> = ({ children, urls, setUrls }) 
             <DialogTrigger asChild className='w-full'>{children}</DialogTrigger>
             <DialogContent>
                 {success ? <Card className={cn(inter.className, "border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm shadow-none")}>
-                    <CardHeader className="p-0 space-y-3 w-full">
+                    <CardHeader className={cn(inter.className, "p-0 space-y-3 w-full")}>
                         <CardTitle>Your Citizen Generated Articles wil be ready in about 4 minutes.</CardTitle>
                         <CardDescription>
                             <Link href="/" className="underline">
