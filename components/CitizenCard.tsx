@@ -164,7 +164,7 @@ const CitizenCard: React.FC = () => {
             <CardContent className="space-y-2 p-0">
                 <CardDescription className="font-medium">Use the open social graph of Farcaster to power your own journalism.</CardDescription>
 
-                <p className="text-xs">Add up to 10 Warpcast cast urls to generate and publish an article.</p>
+                <p className="text-xs">Add up to 10 Warpcast cast urls to generate and publish an article. Estimated generation time is about 4 mins.</p>
                 {error && <p className="text-red text-xs">An error occured.</p>}
                 {urls.map((_, index) => (
                     <div className="relative">
@@ -225,7 +225,7 @@ const CitizenCard: React.FC = () => {
 
                 <Button disabled={urls.filter(u => !u).length > 0 || loading} variant={"secondary"} onClick={fetchData} className="h-8 bg-black text-white w-full">
                     {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3 text-gray-300" />}
-                    {loading ? "Publish" : "Estimated time ~ 4 minutes"}
+                    Publish
                 </Button>
             </CardContent>
         </Card>
