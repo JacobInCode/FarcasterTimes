@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createBrowserClient } from '@supabase/ssr';
+
+// @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 
 // Define a schema for the request content using Zod
