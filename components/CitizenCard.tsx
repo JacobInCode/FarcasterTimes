@@ -215,7 +215,7 @@ const CitizenCard: React.FC = () => {
                     {checked &&
                         <Input
                             className="h-8 text-xs bg-gray-200"
-                            placeholder="Email"
+                            placeholder="Email (Optional)"
                             value={email}
                             disabled={loading}
                             onChange={(e) => setEmail(e.target.value)}
@@ -225,7 +225,7 @@ const CitizenCard: React.FC = () => {
 
                 <Button disabled={urls.filter(u => !u).length > 0 || loading} variant={"secondary"} onClick={fetchData} className="h-8 bg-black text-white w-full">
                     {loading && <Loader2Icon className="h-4 w-4 animate-spin mr-3 text-gray-300" />}
-                    Publish
+                    {loading ? "Publish" : "Estimated time ~ 4 minutes"}
                 </Button>
             </CardContent>
         </Card>
