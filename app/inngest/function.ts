@@ -171,6 +171,7 @@ export const generateCitizenArticle = inngest.createFunction(
         console.log("GENERATING CITIZEN ARTICLE", event.data.urls);
 
         const urls = event.data.urls;
+        const uid = event.data.uid;   
 
         // const data = await genCitizenArticle(event.data.urls);
 
@@ -244,6 +245,7 @@ export const generateCitizenArticle = inngest.createFunction(
         const data = await step.run("submit-article", async () => {
             // save article
             const { data } = await submitArticles([{
+                uid,
                 ...finalArticleObject,
                 image: image.imageUrl,
                 // audio: audio.speechUrl,
@@ -264,6 +266,10 @@ export const generateCitizenArticle = inngest.createFunction(
         console.log("EMAIL DATA", emailData);
 
         // send emails to subscribers
+
+        if (event.data.email === "") {
+            return;
+        }
 
         await step.run("send-email", async () => {
             // send email

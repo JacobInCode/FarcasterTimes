@@ -1,4 +1,5 @@
 export interface Article {
+    uid?: string;
     id?: number;
     headline: string;
     body: string;

@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createBrowserClient } from '@supabase/ssr';
+import { v4 as uuidv4 } from 'uuid';
 
 // Define a schema for the request content using Zod
 const articleSchema = z.object({
+    uid: z.string().optional(),
     body: z.string(),
     headline: z.string(),
     sources: z.array(z.any()),
@@ -24,6 +26,7 @@ export async function POST(request: Request) {
 
         console.log('articles', articles);
         const insertData: any = articles.map(article => ({
+            uid: article.uid || uuidv4(),
             body: article.body,
             headline: article.headline,
             sources: article.sources,
