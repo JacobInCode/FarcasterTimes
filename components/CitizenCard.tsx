@@ -17,6 +17,8 @@ import { Loader2Icon, PlusIcon, X } from "lucide-react";
 import ReceiveEmail from "./ReceiveEmail";
 import { set } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox"
+
+// @ts-ignore
 import { v4 as uuidv4 } from 'uuid';
 import { useRouter } from "next/navigation";
 
