@@ -27,10 +27,10 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
         <div className='pt-2 text-[11px] '>Internet Native</div>
         <div className='flex space-x-1 absolute right-0 top-2'>
           <SubscriptionCard>
-            <div className={cn(inter.className, 'text-[10px] font-medium py-1 px-2 bg-black text-white rounded')}>Subscribe</div>
+            <div className={cn(inter.className, 'text-[10px] font-medium py-1 px-2 bg-violet-800 text-white rounded')}>Subscribe</div>
           </SubscriptionCard>
-          <Link href="/citizen" className={cn(inter.className, 'text-[10px] font-medium py-1 px-2 bg-gray-500 text-white rounded')}>
-            <button>Citizen</button>
+          <Link href="/citizen" className={cn(inter.className, 'text-[10px] font-medium py-1 px-2 bg-violet-600	text-white rounded')}>
+            <button>Create Article</button>
           </Link>
         </div>
       </div>
@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
               <div className={cn(inter.className, 'my-0 border-b border-black text-left py-4 items-center hover:underline text-xs')}>Subscribe</div>
             </SubscriptionCard>
             <Link href="/citizen" className={cn(inter.className, 'my-0 border-b border-black py-4 items-center hover:underline text-xs')}>
-              <p>Citizen</p>
+              <p>Create Article</p>
             </Link>
           </SheetContent>
         </Sheet>
