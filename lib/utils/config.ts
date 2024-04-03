@@ -9,7 +9,7 @@ export const channels = [
     { id: "sports", label: "Sports", sources: ["sports", "esports"] },
     { id: "food", label: "Food", sources: ["food"] },
     // { id: "games", label: "Games", sources: ["games"] },
-        { id: "ted", label: "Ted", sources: ["ted"] },
+        // { id: "ted", label: "Ted", sources: ["ted"] },
     { id: "technology", label: "Technology", sources: ["technology", "dev"] },
 ];
 
