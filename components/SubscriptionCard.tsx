@@ -59,9 +59,9 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ children }) => {
             <DialogContent>
                 <Card className="border-0 flex-col w-full space-y-4 md:space-y-0 flex max-w-2xl p-5 rounded-sm">
                     <CardHeader className="p-0 space-y-3 w-full">
-                        <CardTitle>Subscribe to Citizen Times</CardTitle>
+                        <CardTitle>Subscribe to Farcaster Times</CardTitle>
                         <CardDescription>
-                            Subscribe to Citizen Times to get the latest news and updates.
+                            Subscribe to Farcaster Times to get the latest news and updates.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2 pt-4 px-0 pb-0">

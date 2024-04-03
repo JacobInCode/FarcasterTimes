@@ -1,8 +1,8 @@
-# Citizen Times README
+# Farcaster Times README
 
 ## Overview
 
-Citizen Times integrates traditional news consumption with user interaction, focusing on making news accessible and encouraging community contributions.
+Farcaster Times integrates traditional news consumption with user interaction, focusing on making news accessible and encouraging community contributions.
 
 ## Features
 
@@ -32,4 +32,4 @@ Citizen Times integrates traditional news consumption with user interaction, foc
 
 ## Mission
 
-The aim of Citizen Times is to reshape news reporting by fostering a space where the community actively participates in generating and engaging with news content.
+The aim of Farcaster Times is to reshape news reporting by fostering a space where the community actively participates in generating and engaging with news content.

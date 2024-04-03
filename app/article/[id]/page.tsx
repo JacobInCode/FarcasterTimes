@@ -22,7 +22,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Citizen Times",
+  title: "Farcaster Times",
   description: "Automated news generation for internet natives",
   openGraph: {
     images: ['https://citizentimes.xyz/opengraph-image.png'],
