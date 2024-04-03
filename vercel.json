@@ -9,10 +9,6 @@
             "schedule": "5 18 * * *"
         },
         {
-            "path": "/api/generateArticle/business",
-            "schedule": "10 18 * * *"
-        },
-        {
             "path": "/api/generateArticle/design",
             "schedule": "15 18 * * *"
         },
@@ -35,10 +31,6 @@
         {
             "path": "/api/generateArticle/food",
             "schedule": "40 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/games",
-            "schedule": "45 18 * * *"
         },
         {
             "path": "/api/generateArticle/technology",
