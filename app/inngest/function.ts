@@ -10,7 +10,11 @@ export const generateChannelArticle = inngest.createFunction(
     async ({ event, step }) => {
 
         const channelId = event.data.channelId;
-        const daysBack = event.data.daysBack || 1;
+        let daysBack = event.data.daysBack || 1;
+
+        if (channelId === "ted") {
+            daysBack = 7;
+        };
 
         // FETCH CHANNEL CASTS
         const channelCasts = await step.run("fetch-feed", async () => {

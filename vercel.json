@@ -33,6 +33,10 @@
             "schedule": "40 18 * * *"
         },
         {
+            "path": "/api/generateArticle/ted",
+            "schedule": "40 18 * * *"
+        },
+        {
             "path": "/api/generateArticle/technology",
             "schedule": "50 18 * * *"
         },
