@@ -38,7 +38,7 @@ export const ArticleCardGrid: React.FC<ArticleCardProps> = ({ article }) => {
                 </Link>
                 <div className='flex flex-col justify-start'>
                     <Link href={`/article/${article.id}`} className='no-underline'>
-                        <h3 className='text-sm mt-0 leading-[1.2rem]'>{article.headline}</h3>
+                        <h3 className='text-md mt-0 leading-[1.2rem]'>{article.headline}</h3>
                     </Link>
                     <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                 </div>
@@ -67,7 +67,7 @@ export const ArticleCardSmall: React.FC<ArticleCardProps> = ({ article, idx, inc
                     <Link href={`/article/${article.id}`} className='no-underline'>
                         <h3 className='text-xl mt-0 leading-[1.5rem]'>{article.headline}</h3>
                     </Link>
-                    <Markdown className='prose prose text-sm leading-[1.2rem] mb-1.5'>
+                    <Markdown className='prose prose text-md leading-[1.2rem] mb-1.5'>
                         {sliceAtNextSpace(article.body, 150) + "..."}
                     </Markdown>
                     <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
@@ -85,14 +85,14 @@ export const ArticleCardBig: React.FC<ArticleCardProps> = ({ article, idx, inclu
                 <div className='md:w-full flex flex-col justify-start'>
                     <Link href={`/article/${article.id}`} className='no-underline'>
                         <h3 className='text-xl mt-0 leading-[1.5rem]'>{article.headline}</h3>
-                        <Markdown className='prose prose text-sm leading-[1.2rem] mb-1.5'>
+                        <Markdown className='prose prose text-md leading-[1.2rem] mb-1.5'>
                             {sliceAtNextSpace(article.body, 150) + "..."}
                         </Markdown>
                         <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                     </Link>
 
                     {nextArticle && <Link href={`/article/${nextArticle.id}`} className='no-underline'>
-                        <p className='prose text-sm font-bold text-black leading-[1.3rem] pt-5 mb-3 border-t mb-1.5'>{nextArticle.headline}</p>
+                        <p className='prose text-md font-bold text-black leading-[1.3rem] pt-5 mb-3 border-t mb-1.5'>{nextArticle.headline}</p>
                         <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                     </Link>
                     }

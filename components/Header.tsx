@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
           <div className={cn(inter.className, 'text-xs')}>Today's Date</div>
         </div>
         <Link href="/" className='cursor-pointer'>
-          <TitleLogo className="w-36 md:w-60" />
+          <TitleLogo className="w-56 md:w-96" />
         </Link>
         <div className={"hidden md:inline absolute right-0 flex flex-col pt-3 items-end space-y-0.5 pl-3 md:px-0"}>
           <PriceFeed prices={prices} />
@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
       </header>
       <div className='md:hidden h-0'>
         <Sheet>
-          <SheetTrigger><AlignJustify className='h-4 w-4 absolute left-0 top-4' /></SheetTrigger>
+          <SheetTrigger><AlignJustify className='h-4 w-4 absolute left-0 top-4 mt-0.5' /></SheetTrigger>
           <SheetContent side="top" className='flex flex-col space-x-0 gap-0'>
             {channels.map((channel) => (
               <Link key={channel.id} href={`/feed/${channel.id}`} className='my-0 border-b border-black py-4 items-center hover:underline'>
@@ -67,7 +67,7 @@ const Header: React.FC<HeaderProps> = async ({ prices, channelId }) => {
           </SheetContent>
         </Sheet>
         <Sheet>
-          <SheetTrigger><User className='h-4 w-4 absolute right-0 top-4' /></SheetTrigger>
+          <SheetTrigger><User className='h-4 w-4 absolute right-0 top-4 mt-0.5' /></SheetTrigger>
           <SheetContent side="top" className='flex flex-col space-x-0 gap-0'>
             <SubscriptionCard>
               <div className={cn(inter.className, 'my-0 border-b border-black text-left py-4 items-center hover:underline text-xs')}>Subscribe</div>
