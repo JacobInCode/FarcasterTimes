@@ -38,7 +38,7 @@ export const ArticleCardGrid: React.FC<ArticleCardProps> = ({ article }) => {
                 </Link>
                 <div className='flex flex-col justify-start'>
                     <Link href={`/article/${article.id}`} className='no-underline'>
-                        <h3 className='text-sm mt-0 leading-[1.2rem]'>{article.headline}</h3>
+                        <h3 className='text-[16px] font-medium mt-0 leading-[1.2rem]'>{article.headline}</h3>
                     </Link>
                     <p className={cn(inter.className, 'prose text-[10px] mt-0 text-gray-400 flex items-center')}>{generationIcon(article.citizen)}{channelLabel(article?.channel_id || '').toUpperCase()}</p>
                 </div>
