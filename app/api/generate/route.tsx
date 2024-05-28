@@ -61,12 +61,12 @@ export async function POST(
     req: Request,
 ) {
     try {
-        const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
+        // const supabaseAdmin = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL || '', process.env.SUPABASE_SERVICE_ROLE || '')
 
-        if (!supabaseAdmin) {
-            throw new Error('Not authenticated')
-        }
-
+        // if (!supabaseAdmin) {
+        //     throw new Error('Not authenticated')
+        // }
+// console.log("req", req)
         const configuration = new Configuration({
             apiKey: process.env.OPENAI_API_KEY,
         });
@@ -93,11 +93,12 @@ export async function POST(
             frequency_penalty, 
             presence_penalty,
         })
+        // console.log("response", response.blob())
 
         const stream = OpenAIStream(response);
         // const streamWithInitialMessage = withInitialMessage(stream);
-
         // return stream response (SSE)
+        console.log("stream", stream)
         return new StreamingTextResponse(stream);
 
     } catch (error) {
