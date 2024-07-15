@@ -2,43 +2,43 @@
     "crons": [
         {
           "path": "/api/generateArticle/ethereum",
-          "schedule": "1 18 * * *"
+          "schedule": "46 18 * * *"
         },
         {
             "path": "/api/generateArticle/farcaster",
-            "schedule": "5 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/design",
-            "schedule": "15 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/networkStates",
-            "schedule": "18 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/geopolitics",
-            "schedule": "25 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/bounties",
-            "schedule": "30 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/sports",
-            "schedule": "35 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/food",
-            "schedule": "40 18 * * *"
-        },
-        {
-            "path": "/api/generateArticle/technology",
             "schedule": "50 18 * * *"
         },
         {
+            "path": "/api/generateArticle/design",
+            "schedule": "0 19 * * *"
+        },
+        {
+            "path": "/api/generateArticle/networkStates",
+            "schedule": "3 19 * * *"
+        },
+        {
+            "path": "/api/generateArticle/geopolitics",
+            "schedule": "10 19 * * *"
+        },
+        {
+            "path": "/api/generateArticle/bounties",
+            "schedule": "15 19 * * *"
+        },
+        {
+            "path": "/api/generateArticle/sports",
+            "schedule": "20 19 * * *"
+        },
+        {
+            "path": "/api/generateArticle/food",
+            "schedule": "25 19 * * *"
+        },
+        {
+            "path": "/api/generateArticle/technology",
+            "schedule": "35 19 * * *"
+        },
+        {
             "path": "/api/sendEmails",
-            "schedule": "59 18 * * *"
+            "schedule": "44 19 * * *"
         }
-      ]
+    ]
 }
